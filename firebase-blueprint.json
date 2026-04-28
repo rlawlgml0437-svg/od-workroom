@@ -1,0 +1,72 @@
+{
+  "entities": {
+    "Registration": {
+      "title": "Registration",
+      "description": "A registration for a community program",
+      "type": "object",
+      "properties": {
+        "program": {
+          "type": "string",
+          "description": "Name of the program"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the registrant"
+        },
+        "contact": {
+          "type": "string",
+          "description": "Contact information (phone)"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason for applying"
+        },
+        "date": {
+          "type": "string",
+          "description": "Registration date (local string)"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp of creation"
+        }
+      },
+      "required": [
+        "program",
+        "name",
+        "contact",
+        "reason",
+        "date",
+        "createdAt"
+      ]
+    },
+    "News": {
+      "title": "News",
+      "description": "A news article or notice",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "date": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string" }
+      },
+      "required": ["title", "content", "date", "createdAt", "status"]
+    }
+  },
+  "firestore": {
+    "/registrations/{registrationId}": {
+      "schema": "Registration",
+      "description": "Collection of program registrations"
+    },
+    "/analytics/{dayId}": {
+      "schema": "object",
+      "description": "Daily visit counts"
+    },
+    "/news/{newsId}": {
+      "schema": "News",
+      "description": "Notice and news articles"
+    }
+  }
+}
