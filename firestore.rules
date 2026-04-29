@@ -34,7 +34,7 @@ service cloud.firestore {
         && data.contact is string && data.contact.size() <= 50
         && data.reason is string && data.reason.size() <= 3000
         && data.date is string && data.date.size() <= 50
-        && data.trialDate is string && data.trialDate.matches('^\\d{4}-\\d{2}-\\d{2}$')
+        && data.trialDate is string && data.trialDate.matches('^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}$')
         && data.job is string && data.job.size() <= 100
         && data.referral is string && data.referral.size() <= 200
         && data.questions is string && data.questions.size() <= 2000

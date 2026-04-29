@@ -311,6 +311,13 @@ const sendRegistrationEmail = async (templateParams: Record<string, string>) => 
   }, publicKey);
 };
 
+const formatTrialDateTime = (value: string) => {
+  if (!value) return '';
+  const [datePart, timePart] = value.split('T');
+  if (!datePart || !timePart) return value;
+  return `${datePart} ${timePart}`;
+};
+
 const NewsView = ({ onBack }: { onBack: () => void }) => {
   const [news, setNews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -594,10 +601,11 @@ const TrialApplicationModal = ({
     setSubmitWarning('');
 
     const submitDate = new Date().toLocaleDateString('ko-KR');
+    const trialDateTime = formatTrialDateTime(formData.trialDate);
     const detailMessage = [
       `성함: ${formData.name}`,
       `연락처: ${formData.contact}`,
-      `체험 날짜: ${formData.trialDate}`,
+      `체험 희망 일시: ${trialDateTime}`,
       `하시는 일: ${formData.job}`,
       `유입 경로: ${formData.referral}`,
       `궁금하신 점: ${formData.questions || '없음'}`,
@@ -624,7 +632,8 @@ const TrialApplicationModal = ({
           program_name: '1일 무료체험',
           user_name: formData.name,
           user_contact: formData.contact,
-          trial_date: formData.trialDate,
+          trial_date: trialDateTime,
+          trial_datetime: trialDateTime,
           user_job: formData.job,
           referral_path: formData.referral,
           user_questions: formData.questions || '없음',
@@ -703,10 +712,10 @@ const TrialApplicationModal = ({
 
               <div className="grid md:grid-cols-2 gap-5">
                 <div className="space-y-2">
-                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">체험 날짜</label>
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">체험 희망 일시</label>
                   <input
                     required
-                    type="date"
+                    type="datetime-local"
                     value={formData.trialDate}
                     onChange={(e) => setFormData({ ...formData, trialDate: e.target.value })}
                     className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-point/30"
@@ -1798,7 +1807,7 @@ const AdminDashboard = ({ onClose }: { onClose: () => void }) => {
                     <th className="px-6 py-4">신청 항목</th>
                     <th className="px-6 py-4">신청자</th>
                     <th className="px-6 py-4">연락처</th>
-                    <th className="px-6 py-4">일자</th>
+                    <th className="px-6 py-4">체험 희망 일시</th>
                     <th className="px-6 py-4">상세 내용</th>
                   </tr>
                 </thead>
@@ -1808,7 +1817,7 @@ const AdminDashboard = ({ onClose }: { onClose: () => void }) => {
                       <td className="px-6 py-4 font-bold text-brand-point">{reg.program}</td>
                       <td className="px-6 py-4 font-medium">{reg.name}</td>
                       <td className="px-6 py-4 font-mono text-gray-500">{reg.contact}</td>
-                      <td className="px-6 py-4 text-gray-400">{reg.trialDate || reg.date}</td>
+                      <td className="px-6 py-4 text-gray-400">{reg.trialDate ? formatTrialDateTime(reg.trialDate) : reg.date}</td>
                       <td className="px-6 py-4 text-xs text-gray-500 max-w-sm">
                         {reg.trialDate ? (
                           <div className="space-y-1">
