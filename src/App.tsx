@@ -31,6 +31,8 @@ import {
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import emailjs from '@emailjs/browser';
 
+const FORM_NOTIFICATION_EMAIL = 'rlawlgml0437@gmail.com';
+
 // --- Firebase Error Handling ---
 enum OperationType {
   CREATE = 'create',
@@ -285,13 +287,29 @@ const DEFAULT_NEWS = [
   {
     id: 'trial',
     title: '1일 무료체험 신청 안내',
-    content: '오디워크룸이 궁금하다면 네이버 예약을 통해 1일 무료체험을 신청해보세요. 공간 분위기와 좌석을 직접 확인하실 수 있습니다.',
+    content: '오디워크룸이 궁금하다면 홈페이지 신청폼을 통해 1일 무료체험을 신청해보세요. 공간 분위기와 좌석을 직접 확인하실 수 있습니다.',
     date: '이용 안내',
     imageUrl: '/IMG_1057.JPG',
     status: '게시중',
     isDefault: true
   }
 ];
+
+const sendRegistrationEmail = async (templateParams: Record<string, string>) => {
+  const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+  const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+  if (!serviceId || !templateId || !publicKey) {
+    console.warn('EmailJS settings are missing. Registration was saved without an email notification.');
+    return;
+  }
+
+  await emailjs.send(serviceId, templateId, {
+    to_email: FORM_NOTIFICATION_EMAIL,
+    ...templateParams,
+  }, publicKey);
+};
 
 const NewsView = ({ onBack }: { onBack: () => void }) => {
   const [news, setNews] = useState<any[]>([]);
@@ -429,28 +447,16 @@ const RegistrationModal = ({
       await addDoc(collection(db, 'registrations'), registrationData);
       
       // Send Email Notification
-      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
-      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
-
-      if (serviceId && templateId && publicKey) {
-        try {
-          await emailjs.send(
-            serviceId,
-            templateId,
-            {
-              to_email: 'rlawlgml0437@gmail.com',
-              program_name: program,
-              user_name: formData.name,
-              user_contact: formData.contact,
-              user_reason: formData.reason,
-              submit_date: registrationData.date
-            },
-            publicKey
-          );
-        } catch (mailError) {
-          console.error("Email notification failed:", mailError);
-        }
+      try {
+        await sendRegistrationEmail({
+          program_name: program,
+          user_name: formData.name,
+          user_contact: formData.contact,
+          user_reason: formData.reason,
+          submit_date: registrationData.date
+        });
+      } catch (mailError) {
+        console.error("Email notification failed:", mailError);
       }
       
       setIsSubmitted(true);
@@ -535,6 +541,244 @@ const RegistrationModal = ({
               <div>
                 <h4 className="text-xl font-bold mb-2">신청이 접수되었습니다!</h4>
                 <p className="text-gray-500">확인 후 연락드리겠습니다.</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
+const TrialApplicationModal = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    contact: '',
+    trialDate: '',
+    job: '',
+    referral: '',
+    questions: '',
+  });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitWarning, setSubmitWarning] = useState('');
+
+  if (!isOpen) return null;
+
+  const resetAndClose = () => {
+    onClose();
+    setIsSubmitted(false);
+    setSubmitError('');
+    setSubmitWarning('');
+    setFormData({
+      name: '',
+      contact: '',
+      trialDate: '',
+      job: '',
+      referral: '',
+      questions: '',
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitError('');
+    setSubmitWarning('');
+
+    const submitDate = new Date().toLocaleDateString('ko-KR');
+    const detailMessage = [
+      `성함: ${formData.name}`,
+      `연락처: ${formData.contact}`,
+      `체험 날짜: ${formData.trialDate}`,
+      `하시는 일: ${formData.job}`,
+      `유입 경로: ${formData.referral}`,
+      `궁금하신 점: ${formData.questions || '없음'}`,
+    ].join('\n');
+
+    try {
+      const registrationData = {
+        program: '1일 무료체험',
+        name: formData.name,
+        contact: formData.contact,
+        reason: detailMessage,
+        date: submitDate,
+        trialDate: formData.trialDate,
+        job: formData.job,
+        referral: formData.referral,
+        questions: formData.questions,
+        createdAt: serverTimestamp(),
+      };
+
+      await addDoc(collection(db, 'registrations'), registrationData);
+
+      try {
+        await sendRegistrationEmail({
+          program_name: '1일 무료체험',
+          user_name: formData.name,
+          user_contact: formData.contact,
+          trial_date: formData.trialDate,
+          user_job: formData.job,
+          referral_path: formData.referral,
+          user_questions: formData.questions || '없음',
+          user_reason: detailMessage,
+          submit_date: submitDate,
+        });
+      } catch (mailError) {
+        console.error('Trial application email failed:', mailError);
+        setSubmitWarning('신청은 접수되었지만 메일 발송에 실패했습니다. EmailJS 설정을 확인해주세요.');
+      }
+
+      setIsSubmitted(true);
+      setTimeout(resetAndClose, 2200);
+    } catch (error) {
+      console.error('Trial application failed:', error);
+      const message = error instanceof Error ? error.message : String(error);
+      setSubmitError(
+        message.includes('permission') || message.includes('Missing or insufficient permissions')
+          ? '신청 저장 권한이 거절되었습니다. Firestore 보안 규칙 배포가 필요합니다.'
+          : '신청 접수 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-[120] flex items-center justify-center p-4 md:p-6 bg-black/60 backdrop-blur-sm">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.94, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="bg-white rounded-[32px] md:rounded-[40px] w-full max-w-2xl max-h-[92vh] overflow-y-auto shadow-2xl"
+      >
+        <div className="p-6 md:p-10">
+          <div className="flex justify-between gap-6 mb-8">
+            <div>
+              <p className="text-xs font-bold text-brand-point uppercase tracking-widest mb-2">Free Trial</p>
+              <h3 className="text-2xl md:text-3xl font-bold">1일 무료체험 신청</h3>
+            </div>
+            <button
+              type="button"
+              onClick={resetAndClose}
+              aria-label="신청폼 닫기"
+              className="h-10 w-10 flex-shrink-0 inline-flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X size={22} />
+            </button>
+          </div>
+
+          {!isSubmitted ? (
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid md:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">성함</label>
+                  <input
+                    required
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="성함을 입력해주세요"
+                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-point/30"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">연락처</label>
+                  <input
+                    required
+                    type="tel"
+                    value={formData.contact}
+                    onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                    placeholder="010-0000-0000"
+                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-point/30"
+                  />
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-5">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">체험 날짜</label>
+                  <input
+                    required
+                    type="date"
+                    value={formData.trialDate}
+                    onChange={(e) => setFormData({ ...formData, trialDate: e.target.value })}
+                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-point/30"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">하시는 일</label>
+                  <input
+                    required
+                    type="text"
+                    value={formData.job}
+                    onChange={(e) => setFormData({ ...formData, job: e.target.value })}
+                    placeholder="예: 디자이너, 개발자, 프리랜서"
+                    className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-point/30"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">유입 경로</label>
+                <input
+                  required
+                  type="text"
+                  value={formData.referral}
+                  onChange={(e) => setFormData({ ...formData, referral: e.target.value })}
+                  placeholder="예: 인스타그램, 네이버 검색, 지인 추천"
+                  className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-point/30"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">궁금하신 점</label>
+                <textarea
+                  rows={5}
+                  value={formData.questions}
+                  onChange={(e) => setFormData({ ...formData, questions: e.target.value })}
+                  placeholder="궁금하신 점을 자유롭게 적어주세요"
+                  className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-point/30 resize-none"
+                />
+              </div>
+
+              {submitError && (
+                <div className="rounded-2xl border border-red-100 bg-red-50 px-5 py-4 text-sm leading-relaxed text-red-500">
+                  {submitError}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="btn-primary w-full py-5 text-base shadow-xl shadow-brand-point/20 flex items-center justify-center"
+              >
+                {isSubmitting ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                ) : (
+                  <span>신청폼 제출하기</span>
+                )}
+              </button>
+            </form>
+          ) : (
+            <div className="py-16 flex flex-col items-center text-center space-y-6">
+              <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center text-green-500">
+                <CheckCircle2 size={48} />
+              </div>
+              <div>
+                <h4 className="text-xl font-bold mb-2">무료체험 신청이 접수되었습니다!</h4>
+                <p className="text-gray-500">확인 후 연락드리겠습니다.</p>
+                {submitWarning && (
+                  <p className="mt-4 rounded-2xl border border-amber-100 bg-amber-50 px-5 py-4 text-sm leading-relaxed text-amber-700">
+                    {submitWarning}
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -644,7 +888,7 @@ const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | '
   );
 };
 
-const Hero = ({ onSpaceTour }: { onSpaceTour: () => void }) => (
+const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialApply: () => void }) => (
   <section className="relative min-h-screen flex items-end justify-center overflow-hidden pb-12 md:pb-16">
     <div className="absolute inset-0 z-0">
       <video 
@@ -672,13 +916,13 @@ const Hero = ({ onSpaceTour }: { onSpaceTour: () => void }) => (
         className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
       >
         <button onClick={onSpaceTour} className="btn-primary bg-white border-white text-brand-point hover:bg-brand-point hover:text-white w-full sm:w-auto cursor-pointer">공간 둘러보기</button>
-        <a href={ODI_CONTENT.brand.contact.trial} target="_blank" rel="noopener noreferrer" className="btn-secondary bg-white/20 backdrop-blur-md border-white/30 text-white hover:bg-white hover:text-brand-point w-full sm:w-auto">1일 무료체험 신청</a>
+        <button type="button" onClick={onTrialApply} className="btn-secondary bg-white/20 backdrop-blur-md border-white/30 text-white hover:bg-white hover:text-brand-point w-full sm:w-auto">1일 무료체험 신청</button>
       </motion.div>
     </div>
   </section>
 );
 
-const SpaceDetail = () => {
+const SpaceDetail = ({ onTrialApply }: { onTrialApply: () => void }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -754,9 +998,9 @@ const SpaceDetail = () => {
               subtitle="백문이 불여일견, 오디워크룸의 온기를 직접 느껴보시는 건 어떨까요?"
            />
            <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <a href={ODI_CONTENT.brand.contact.trial} target="_blank" rel="noopener noreferrer" className="btn-primary py-4 px-12">
+              <button type="button" onClick={onTrialApply} className="btn-primary py-4 px-12">
                 1일 무료체험 신청하기
-              </a>
+              </button>
               <a href={ODI_CONTENT.brand.contact.kakao} className="btn-secondary py-4 px-12">
                 이용권 상세 문의
               </a>
@@ -1542,7 +1786,7 @@ const AdminDashboard = ({ onClose }: { onClose: () => void }) => {
                     <th className="px-6 py-4">신청자</th>
                     <th className="px-6 py-4">연락처</th>
                     <th className="px-6 py-4">일자</th>
-                    <th className="px-6 py-4">신청 동기</th>
+                    <th className="px-6 py-4">상세 내용</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -1551,8 +1795,18 @@ const AdminDashboard = ({ onClose }: { onClose: () => void }) => {
                       <td className="px-6 py-4 font-bold text-brand-point">{reg.program}</td>
                       <td className="px-6 py-4 font-medium">{reg.name}</td>
                       <td className="px-6 py-4 font-mono text-gray-500">{reg.contact}</td>
-                      <td className="px-6 py-4 text-gray-400">{reg.date}</td>
-                      <td className="px-6 py-4 text-xs text-gray-500 max-w-xs truncate">{reg.reason}</td>
+                      <td className="px-6 py-4 text-gray-400">{reg.trialDate || reg.date}</td>
+                      <td className="px-6 py-4 text-xs text-gray-500 max-w-sm">
+                        {reg.trialDate ? (
+                          <div className="space-y-1">
+                            <p><span className="font-bold text-gray-700">일:</span> {reg.job}</p>
+                            <p><span className="font-bold text-gray-700">유입:</span> {reg.referral}</p>
+                            <p className="truncate"><span className="font-bold text-gray-700">문의:</span> {reg.questions || '없음'}</p>
+                          </div>
+                        ) : (
+                          <span className="line-clamp-2">{reg.reason}</span>
+                        )}
+                      </td>
                     </tr>
                   )) : (
                     <tr>
@@ -1763,6 +2017,7 @@ const PricingDetail = () => {
 export default function App() {
   const [view, setView] = useState<'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news'>('home');
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [isTrialApplicationOpen, setIsTrialApplicationOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState('');
 
   useEffect(() => {
@@ -1817,6 +2072,10 @@ export default function App() {
         onClose={() => setIsRegistrationOpen(false)}
         program={selectedProgram}
       />
+      <TrialApplicationModal
+        isOpen={isTrialApplicationOpen}
+        onClose={() => setIsTrialApplicationOpen(false)}
+      />
 
       <AnimatePresence mode="wait">
         {view === 'admin' && (
@@ -1845,7 +2104,7 @@ export default function App() {
             exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.4 }}
           >
-            <SpaceDetail />
+            <SpaceDetail onTrialApply={() => setIsTrialApplicationOpen(true)} />
           </motion.div>
         )}
 
@@ -1868,7 +2127,7 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Hero onSpaceTour={() => setView('space-detail')} />
+            <Hero onSpaceTour={() => setView('space-detail')} onTrialApply={() => setIsTrialApplicationOpen(true)} />
             <Introduction />
             <Audience />
             <Atmosphere />

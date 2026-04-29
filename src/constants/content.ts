@@ -32,7 +32,7 @@ export const ODI_CONTENT = {
     subtitle: "혼자 일하는 사람들을 위한 김포 운양동의 커뮤니티형 오픈 작업실",
     buttons: [
       { text: "공간 둘러보기", link: "#intro" },
-      { text: "1일 무료체험 신청", link: "https://m.booking.naver.com/booking/10/bizes/1603452/items/7482030?theme=place&service-target=map-pc&lang=ko&area=plt&map-search=1" }
+      { text: "1일 무료체험 신청", link: "#trial-application" }
     ]
   },
   intro: {
