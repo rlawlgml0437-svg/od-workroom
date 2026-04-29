@@ -1333,6 +1333,19 @@ const Footer = ({ onViewChange }: { onViewChange: (view: any) => void }) => {
   );
 };
 
+const FloatingKakaoButton = () => (
+  <a
+    href={ODI_CONTENT.brand.contact.kakao}
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="카카오 채널로 상담하기"
+    title="카카오 채널로 상담하기"
+    className="fixed bottom-6 right-6 z-[90] inline-flex h-14 w-14 items-center justify-center rounded-full bg-brand-point text-white shadow-xl shadow-brand-point/30 transition-all hover:-translate-y-1 hover:bg-brand-point-hover hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-brand-point/30 md:bottom-8 md:right-8 md:h-16 md:w-16"
+  >
+    <MessageCircle size={28} strokeWidth={2.4} />
+  </a>
+);
+
 import { 
   BarChart, 
   Bar, 
@@ -2066,6 +2079,7 @@ export default function App() {
   return (
     <div className="bg-brand-bg font-sans overflow-x-hidden">
       {view !== 'admin' && <Navbar onViewChange={handleViewChange} currentView={view} />}
+      {view !== 'admin' && <FloatingKakaoButton />}
       
       <RegistrationModal 
         isOpen={isRegistrationOpen}
