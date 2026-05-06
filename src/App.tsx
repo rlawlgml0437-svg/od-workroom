@@ -33,6 +33,18 @@ import emailjs from '@emailjs/browser';
 
 const FORM_NOTIFICATION_EMAIL = 'rlawlgml0437@gmail.com';
 
+declare global {
+  interface Window {
+    fbq?: (...args: unknown[]) => void;
+  }
+}
+
+const trackMetaStartTrial = () => {
+  if (typeof window === 'undefined' || typeof window.fbq !== 'function') return;
+
+  window.fbq('track', 'StartTrial');
+};
+
 // --- Firebase Error Handling ---
 enum OperationType {
   CREATE = 'create',
@@ -626,6 +638,7 @@ const TrialApplicationModal = ({
       };
 
       await addDoc(collection(db, 'registrations'), registrationData);
+      trackMetaStartTrial();
 
       try {
         await sendRegistrationEmail({
