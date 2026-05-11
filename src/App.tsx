@@ -39,10 +39,25 @@ declare global {
   }
 }
 
-const trackMetaStartTrial = () => {
+const trackMetaTrialReservation = (trialDateTime: string) => {
   if (typeof window === 'undefined' || typeof window.fbq !== 'function') return;
 
-  window.fbq('track', 'StartTrial');
+  // 잠재고객(Lead) 이벤트
+  window.fbq('track', 'Lead', {
+    content_name: '1일 무료체험',
+    content_category: '체험 예약',
+    value: 0.0,
+    currency: 'KRW',
+  });
+
+  // 예약 스케줄 이벤트
+  window.fbq('track', 'Schedule', {
+    content_name: '1일 무료체험',
+    content_category: '체험 예약',
+    value: 0.0,
+    currency: 'KRW',
+    trial_date: trialDateTime,
+  });
 };
 
 // --- Firebase Error Handling ---
@@ -638,7 +653,7 @@ const TrialApplicationModal = ({
       };
 
       await addDoc(collection(db, 'registrations'), registrationData);
-      trackMetaStartTrial();
+      trackMetaTrialReservation(trialDateTime);
 
       try {
         await sendRegistrationEmail({
