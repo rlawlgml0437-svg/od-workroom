@@ -60,6 +60,24 @@ const trackMetaTrialReservation = (trialDateTime: string) => {
   });
 };
 
+// 전화번호 자동 포맷팅 함수
+const formatPhoneNumber = (value: string): string => {
+  // 숫자만 추출
+  const numbers = value.replace(/\D/g, '');
+
+  // 최대 11자리까지만 허용 (010-0000-0000)
+  const limited = numbers.slice(0, 11);
+
+  // 포맷팅 적용
+  if (limited.length <= 3) {
+    return limited;
+  } else if (limited.length <= 7) {
+    return `${limited.slice(0, 3)}-${limited.slice(3)}`;
+  } else {
+    return `${limited.slice(0, 3)}-${limited.slice(3, 7)}-${limited.slice(7)}`;
+  }
+};
+
 // --- Firebase Error Handling ---
 enum OperationType {
   CREATE = 'create',
@@ -539,7 +557,7 @@ const RegistrationModal = ({
                   required
                   type="tel"
                   value={formData.contact}
-                  onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, contact: formatPhoneNumber(e.target.value) })}
                   placeholder="010-0000-0000"
                   className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-6 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-point/30" 
                 />
@@ -731,7 +749,7 @@ const TrialApplicationModal = ({
                     required
                     type="tel"
                     value={formData.contact}
-                    onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, contact: formatPhoneNumber(e.target.value) })}
                     placeholder="010-0000-0000"
                     className="w-full bg-gray-50 border border-gray-100 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-point/30"
                   />
@@ -900,7 +918,12 @@ const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | '
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-brand-text" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        <button
+          className="md:hidden text-brand-text"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label={isMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+          aria-expanded={isMenuOpen}
+        >
           {isMenuOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -926,7 +949,7 @@ const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | '
 };
 
 const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialApply: () => void }) => (
-  <section className="relative min-h-screen flex items-end justify-center overflow-hidden pb-12 md:pb-16">
+  <section className="relative min-h-screen flex items-center overflow-hidden px-0 pb-16 pt-24 md:pb-20 md:pt-28">
     <div className="absolute inset-0 z-0">
       <video 
         src="/main%20video.mp4" 
@@ -935,22 +958,45 @@ const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialA
         playsInline
         className="w-full h-full object-cover"
       />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
     </div>
 
-    <div className="relative z-10 max-w-7xl mx-auto px-6 text-center text-white">
+    <div className="relative z-10 w-full max-w-6xl mx-auto px-6 text-left text-white">
+      <motion.h1
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.25 }}
+        className="mb-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight md:text-7xl"
+      >
+        {ODI_CONTENT.hero.title}
+      </motion.h1>
       <motion.p 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="text-xl md:text-2xl mb-6 max-w-3xl mx-auto font-medium leading-relaxed"
+        transition={{ delay: 0.35 }}
+        className="mb-7 max-w-2xl text-lg font-medium leading-relaxed text-white/90 md:text-2xl"
       >
-        혼자 일하는 사람들을 위한 김포 운양동의 커뮤니티형 오픈 작업실
+        {ODI_CONTENT.hero.subtitle}
       </motion.p>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.45 }}
+        className="mb-9 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-semibold text-white/85 md:text-base"
+      >
+        {ODI_CONTENT.hero.highlights.map((item, index) => (
+          <span key={item} className="flex items-center">
+            {index > 0 && <span className="mr-4 h-1 w-1 rounded-full bg-white/55" />}
+            {item}
+          </span>
+        ))}
+      </motion.div>
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.6 }}
-        className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
+        transition={{ delay: 0.55 }}
+        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
       >
         <button onClick={onSpaceTour} className="btn-primary bg-white border-white text-brand-point hover:bg-brand-point hover:text-white w-full sm:w-auto cursor-pointer">공간 둘러보기</button>
         <button type="button" onClick={onTrialApply} className="btn-secondary bg-white/20 backdrop-blur-md border-white/30 text-white hover:bg-white hover:text-brand-point w-full sm:w-auto">1일 무료체험 신청</button>
@@ -1238,6 +1284,44 @@ const Pricing = ({ onMoreDetail }: { onMoreDetail: () => void }) => (
           </motion.div>
         ))}
       </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mt-14 max-w-4xl mx-auto overflow-hidden rounded-[32px] border border-brand-point/15 bg-white shadow-sm"
+      >
+        <div className="grid gap-0 md:grid-cols-[1.2fr_0.8fr]">
+          <div className="p-8 md:p-10">
+            <p className="mb-3 text-xs font-bold uppercase tracking-[0.24em] text-brand-point">
+              {ODI_CONTENT.dedicatedSeatPromo.eyebrow}
+            </p>
+            <h3 className="mb-4 text-2xl font-bold leading-tight text-brand-text md:text-3xl">
+              {ODI_CONTENT.dedicatedSeatPromo.title}
+            </h3>
+            <p className="mb-6 text-sm leading-relaxed text-gray-500 md:text-base">
+              {ODI_CONTENT.dedicatedSeatPromo.description}
+            </p>
+            <div className="mb-8 flex flex-wrap gap-2">
+              {ODI_CONTENT.dedicatedSeatPromo.points.map((point) => (
+                <span key={point} className="rounded-full bg-brand-blue-light px-4 py-2 text-xs font-bold text-brand-point">
+                  {point}
+                </span>
+              ))}
+            </div>
+            <a href={ODI_CONTENT.brand.contact.kakao} target="_blank" rel="noopener noreferrer" className="btn-primary inline-flex px-8 py-4">
+              {ODI_CONTENT.dedicatedSeatPromo.cta}
+            </a>
+          </div>
+          <div className="relative min-h-[260px] overflow-hidden bg-brand-blue-light">
+            <img src="/DSCF3842%20copy.jpg" alt="오디워크룸 전용석" className="h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-text/55 to-transparent" />
+            <div className="absolute bottom-6 left-6 rounded-2xl bg-white/90 px-5 py-3 text-sm font-bold text-brand-text shadow-lg backdrop-blur-md">
+              24시간 이용 가능한 고정 작업석
+            </div>
+          </div>
+        </div>
+      </motion.div>
     </div>
   </section>
 );

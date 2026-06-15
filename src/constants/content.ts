@@ -12,7 +12,7 @@ export const ODI_CONTENT = {
     location: "경기도 김포시 김포한강1로 230, 801호",
     phone: "010-4668-5405",
     contact: {
-      kakao: "http://pf.kakao.com/_xkwkgn",
+      kakao: "https://pf.kakao.com/_xkwkgn",
       instagram: "https://www.instagram.com/od.workroom",
       naverMap: "https://naver.me/5ZSaQygP",
       trial: "https://m.booking.naver.com/booking/10/bizes/1603452/items/7482030?theme=place&service-target=map-pc&lang=ko&area=plt&map-search=1",
@@ -28,8 +28,9 @@ export const ODI_CONTENT = {
     { id: 6, url: "/IMG_0504.JPG", link: "https://www.instagram.com/od.workroom" }
   ],
   hero: {
-    title: "Freelance, not Friendless.",
-    subtitle: "혼자 일하는 사람들을 위한 김포 운양동의 커뮤니티형 오픈 작업실",
+    title: "운양역 1분, 24시간 한강뷰 작업공간",
+    subtitle: "카페 눈치 없이 오래 일하고 싶은 분들을 위한 김포 운양동 커뮤니티 오피스",
+    highlights: ["1일 무료체험 가능", "자유석·전용석 운영", "커피·간식·콘센트 제공"],
     buttons: [
       { text: "공간 둘러보기", link: "#intro" },
       { text: "1일 무료체험 신청", link: "#trial-application" }
@@ -76,6 +77,13 @@ export const ODI_CONTENT = {
   ],
   pricingProps: {
     disclaimer: "3개월 이상 계약 시 할인 혜택이 제공됩니다."
+  },
+  dedicatedSeatPromo: {
+    eyebrow: "Dedicated Desk",
+    title: "전용석 잔여 2석 상담 가능",
+    description: "매번 자리 찾지 않아도 되는 나만의 고정 작업석이 필요하다면 전용석을 확인해보세요. 짐을 두고 다닐 수 있고, 24시간 언제든 바로 작업을 시작할 수 있습니다.",
+    points: ["고정 좌석", "개인 서랍", "넓은 데스크", "24시간 이용"],
+    cta: "전용석 문의하기"
   },
   pricing: [
     {
