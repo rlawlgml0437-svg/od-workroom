@@ -949,7 +949,7 @@ const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | '
 };
 
 const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialApply: () => void }) => (
-  <section className="relative min-h-screen flex items-center overflow-hidden px-0 pb-16 pt-24 md:pb-20 md:pt-28">
+  <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-0 pb-16 pt-24 md:pb-20 md:pt-28">
     <div className="absolute inset-0 z-0">
       <video 
         src="/main%20video.mp4" 
@@ -958,16 +958,14 @@ const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialA
         playsInline
         className="w-full h-full object-cover"
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/30 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
     </div>
 
-    <div className="relative z-10 w-full max-w-6xl mx-auto px-6 text-left text-white">
+    <div className="relative z-10 w-full max-w-4xl mx-auto px-6 text-center text-white">
       <motion.h1
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="mb-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight md:text-7xl"
+        className="mx-auto mb-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight text-white md:text-7xl"
       >
         {ODI_CONTENT.hero.title}
       </motion.h1>
@@ -975,7 +973,7 @@ const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialA
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
-        className="mb-7 max-w-2xl text-lg font-medium leading-relaxed text-white/90 md:text-2xl"
+        className="mx-auto mb-7 max-w-2xl text-lg font-medium leading-relaxed text-white md:text-2xl"
       >
         {ODI_CONTENT.hero.subtitle}
       </motion.p>
@@ -983,7 +981,7 @@ const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialA
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.45 }}
-        className="mb-9 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm font-semibold text-white/85 md:text-base"
+        className="mb-9 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-semibold text-white md:text-base"
       >
         {ODI_CONTENT.hero.highlights.map((item, index) => (
           <span key={item} className="flex items-center">
@@ -996,7 +994,7 @@ const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialA
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.55 }}
-        className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4"
+        className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4"
       >
         <button onClick={onSpaceTour} className="btn-primary bg-white border-white text-brand-point hover:bg-brand-point hover:text-white w-full sm:w-auto cursor-pointer">공간 둘러보기</button>
         <button type="button" onClick={onTrialApply} className="btn-secondary bg-white/20 backdrop-blur-md border-white/30 text-white hover:bg-white hover:text-brand-point w-full sm:w-auto">1일 무료체험 신청</button>
