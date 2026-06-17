@@ -2,6 +2,7 @@ node_modules/
 build/
 dist/
 coverage/
+photo-source/
 .DS_Store
 *.log
 .env*

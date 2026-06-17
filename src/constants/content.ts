@@ -30,15 +30,13 @@ export const ODI_CONTENT = {
   hero: {
     title: "운양역 1분, 24시간 한강뷰 작업공간",
     subtitle: "카페 눈치 없이 오래 일하고 싶은 분들을 위한 김포 운양동 커뮤니티 오피스",
-    highlights: ["1일 무료체험 가능", "자유석·전용석 운영", "커피·간식·콘센트 제공"],
     buttons: [
-      { text: "공간 둘러보기", link: "#intro" },
       { text: "1일 무료체험 신청", link: "#trial-application" }
     ]
   },
   intro: {
     title: "혼자 일하지만, 외롭지 않게.",
-    description: "오디워크룸은 강제적인 네트워킹보다 서로의 온기를 느낄 수 있는 느슨한 연대를 지향합니다. 때로는 조용히 몰입하고, 때로는 가벼운 인사와 함께 커피 한 잔을 나누며 함께의 힘을 느껴보세요."
+    description: "오디워크룸은 각자 조용히 일하다가도 자연스럽게 인사하고 커피 한 잔 나눌 수 있는 작업공간입니다. 억지스러운 네트워킹보다, 오래 일해도 편한 분위기를 중요하게 생각합니다."
   },
   targetAudience: [
     {
@@ -48,7 +46,7 @@ export const ODI_CONTENT = {
     },
     {
       title: "1인 사업가",
-      desc: "외로운 의사결정의 연속에서 비슷한 고민을 나누고 영감을 주고받을 동료가 그리운 분.",
+      desc: "혼자 결정하고 움직이는 시간이 많아, 비슷한 일을 하는 사람들과 가볍게 이야기 나눌 곳이 필요한 분.",
       icon: "Briefcase"
     },
     {
@@ -72,6 +70,73 @@ export const ODI_CONTENT = {
       "/IMG_0504.JPG"
     ]
   },
+  photoGallery: [
+    {
+      title: "자유석",
+      desc: "창가와 긴 테이블을 오가며 그날의 루틴에 맞춰 앉을 수 있는 오픈 좌석입니다.",
+      images: [
+        "/photos/web/free-seat-001.webp",
+        "/photos/web/free-seat-003.webp",
+        "/photos/web/free-seat-006.webp",
+        "/photos/web/free-seat-008.webp",
+        "/photos/web/free-seat-007.webp",
+        "/photos/web/free-seat-004.webp",
+        "/photos/web/free-seat-005.webp",
+        "/photos/web/free-seat-011.webp",
+        "/photos/web/free-seat-009.webp",
+        "/photos/web/free-seat-010.webp",
+        "/photos/web/free-seat-002.webp"
+      ]
+    },
+    {
+      title: "전용석",
+      desc: "개인 조명과 넓은 데스크가 준비된, 매일 바로 시작할 수 있는 고정 작업석입니다.",
+      images: [
+        "/photos/web/dedicated-seat-004.webp",
+        "/photos/web/dedicated-seat-002.webp",
+        "/photos/web/dedicated-seat-001.webp",
+        "/photos/web/dedicated-seat-005.webp",
+        "/photos/web/dedicated-seat-003.webp"
+      ]
+    },
+    {
+      title: "휴게라운지",
+      desc: "커피와 간식, 소파와 창밖 풍경으로 잠깐의 쉼을 챙기는 멤버 전용 공간입니다.",
+      images: [
+        "/photos/web/lounge-002.webp",
+        "/photos/web/lounge-001.webp",
+        "/photos/web/lounge-004.webp",
+        "/photos/web/lounge-005.webp",
+        "/photos/web/lounge-006.webp",
+        "/photos/web/lounge-007.webp",
+        "/photos/web/lounge-003.webp"
+      ]
+    },
+    {
+      title: "기타시설",
+      desc: "프린터, 싱크대, 커피머신 등 오래 머물기 편한 기본 시설을 갖췄습니다.",
+      images: [
+        "/photos/web/facilities-001.webp",
+        "/photos/web/facilities-002.webp",
+        "/photos/web/facilities-003.webp"
+      ]
+    },
+    {
+      title: "커뮤니티",
+      desc: "각자의 일을 하다가도 가볍게 연결되고, 함께 몰입하는 장면들이 쌓입니다.",
+      images: [
+        "/photos/web/community-002.webp",
+        "/photos/web/community-005.webp",
+        "/photos/web/community-006.webp",
+        "/photos/web/community-003.webp",
+        "/photos/web/community-008.webp",
+        "/photos/web/community-001.webp",
+        "/photos/web/community-007.webp",
+        "/photos/web/community-009.webp",
+        "/photos/web/community-004.webp",
+      ]
+    }
+  ],
   members: [
     "유튜버", "개발자", "디자이너", "영상PD", "브랜드 운영가", "작가", "번역가", "마케터"
   ],
@@ -92,9 +157,27 @@ export const ODI_CONTENT = {
       price: "140,000~",
       period: "/1개월",
       buttonText: "이용권 문의하기",
-      image: "/DSCF3865%20copy.jpg",
-      descriptionTitle: "“오늘은 햇살 좋은 창가에서, 내일은 넓은 테이블에서.”",
-      descriptionBody: "매일 똑같은 자리에서 일하기 답답할 때가 있죠. 카페의 자유로운 분위기는 좋지만 불편한 의자와 콘센트 전쟁이 지겨운 분들을 위해 준비했습니다. 가장 유연하게, 하지만 가장 밀도 있게 일하는 공간. 오디워크룸의 자유석을 소개합니다.\n\n노트북 하나만 들고 가볍게 오세요. 어디에 앉든 당신의 몰입을 돕는 최적의 도구들이 준비되어 있습니다.",
+      image: "/photos/web/free-seat-001.webp",
+      galleryImages: [
+        "/photos/web/free-seat-001.webp",
+        "/photos/web/free-seat-003.webp",
+        "/photos/web/free-seat-006.webp",
+        "/photos/web/free-seat-008.webp",
+        "/photos/web/free-seat-007.webp",
+        "/photos/web/free-seat-004.webp",
+        "/photos/web/free-seat-005.webp",
+        "/photos/web/free-seat-011.webp",
+        "/photos/web/free-seat-009.webp",
+        "/photos/web/free-seat-010.webp",
+        "/photos/web/free-seat-002.webp"
+      ],
+      descriptionTitle: "오늘은 햇살 좋은 창가에서,\n내일은 넓은 테이블에서.",
+      descriptionBody: "창가 자리, 긴 테이블, 개인 데스크를 그날 컨디션에 맞춰 오가며 쓰는 좌석입니다. 노트북만 들고 와도 오래 앉아 일하기 편하게 준비되어 있어요.",
+      practicalInfo: [
+        { label: "추천", text: "카페보다 편하게 오래 일하고 싶은 분" },
+        { label: "출입", text: "입주자분들께 전용 어플 사용 방법을 안내드립니다." },
+        { label: "포함", text: "데스크, 포커스 체어, 콘센트, 와이파이, 커피와 간식" }
+      ],
       periods: [
         { label: "1개월", price: "170,000원" },
         { label: "3개월", price: "160,000원", tag: "인기" },
@@ -110,12 +193,12 @@ export const ODI_CONTENT = {
         {
           emoji: "🪑",
           title: "허리 아픈 나무 의자는 안녕",
-          text: "자유석에도 타협은 없습니다. 오래 앉아 있어도 편안한 포커스 체어(Focus Chair)가 당신의 허리를 단단하게 지켜줍니다."
+          text: "자유석에도 오래 앉기 편한 포커스 체어(Focus Chair)를 두었습니다. 카페 의자가 불편했던 분들이 차이를 바로 느끼실 거예요."
         },
         {
           emoji: "☕️",
           title: "취향대로 고르는 업무 존",
-          text: "때로는 도서관처럼 집중할 수 있는 개인 데스크에서, 때로는 영감을 주는 대형 테이블에서 탁 트인 뷰를 보며 일해보세요."
+          text: "혼자 조용히 앉고 싶을 때는 개인 데스크에, 조금 트인 자리가 필요할 때는 긴 테이블에 앉아보세요."
         }
       ],
       features: [
@@ -131,9 +214,21 @@ export const ODI_CONTENT = {
       price: "270,000~",
       period: "/1개월",
       buttonText: "이용권 문의하기",
-      image: "/DSCF3842%20copy.jpg",
-      descriptionTitle: "매일 아침, 좋은 자리를 찾아 헤맬 필요 없어요.",
-      descriptionBody: "노트북과 무거운 짐을 매번 이고 지고 다닐 필요도 없죠. 오롯이 나만의 속도에 집중할 수 있는 가장 안정적인 공간, 오디워크룸의 전용석을 소개합니다.\n\n혼자 일하는 사람들에게 의자와 책상은 단순한 가구가 아니라 가장 중요한 ’장비‘니까요. 오랜 시간 머물러도 불편함이 없도록, 가장 기본에 충실하게 준비했습니다.",
+      image: "/photos/web/dedicated-seat-004.webp",
+      galleryImages: [
+        "/photos/web/dedicated-seat-004.webp",
+        "/photos/web/dedicated-seat-002.webp",
+        "/photos/web/dedicated-seat-001.webp",
+        "/photos/web/dedicated-seat-005.webp",
+        "/photos/web/dedicated-seat-003.webp"
+      ],
+      descriptionTitle: "매일 아침, 좋은 자리를 찾아\n헤맬 필요 없어요.",
+      descriptionBody: "개인 데스크와 의자, 조명, 서랍을 고정으로 쓰는 좌석입니다. 장비를 두고 다니고, 출근하듯 바로 일을 시작하고 싶은 분께 잘 맞습니다.",
+      practicalInfo: [
+        { label: "추천", text: "고정 자리와 개인 장비 보관이 필요한 분" },
+        { label: "출입", text: "입주자분들께 전용 어플 사용 방법을 안내드립니다." },
+        { label: "포함", text: "1400 데스크, 시디즈 의자, 개인 조명, 서랍, 멀티탭" }
+      ],
       periods: [
         { label: "1개월", price: "320,000원" },
         { label: "3개월", price: "310,000원" },
@@ -144,7 +239,7 @@ export const ODI_CONTENT = {
         {
           emoji: "🪑",
           title: "내 몸에 맞춘 듯한 편안함",
-          text: "허리를 단단하게 받쳐주는 ’시디즈 T20‘ 의자와 듀얼 모니터를 둬도 넉넉한 ’데스커 1400*700‘ 와이드 데스크가 최적의 업무 환경을 제공합니다."
+          text: "시디즈 T20 의자와 데스커 1400*700 데스크를 사용합니다. 모니터와 노트북을 함께 올려도 여유가 있습니다."
         },
         {
           emoji: "💡",
@@ -170,9 +265,23 @@ export const ODI_CONTENT = {
       price: "FREE",
       period: " (멤버 전용)",
       buttonText: "공간 문의하기",
-      image: "/IMG_1057.JPG",
-      descriptionTitle: "한강을 바라보며 나누는 기분 좋은 리프레시",
-      descriptionBody: "몰입만큼 중요한 것은 제대로 된 휴식입니다. 오디워크룸 멤버라면 누구나 자유롭게 이용할 수 있는 라운지에서 잠시 숨을 고르세요. \n\n탁 트인 한강 뷰를 배경으로 커피 한 잔의 여유를 즐기거나, 멤버들과 가벼운 인사를 나누며 새로운 영감을 얻을 수 있습니다.",
+      image: "/photos/web/lounge-002.webp",
+      galleryImages: [
+        "/photos/web/lounge-002.webp",
+        "/photos/web/lounge-001.webp",
+        "/photos/web/lounge-004.webp",
+        "/photos/web/lounge-005.webp",
+        "/photos/web/lounge-006.webp",
+        "/photos/web/lounge-007.webp",
+        "/photos/web/lounge-003.webp"
+      ],
+      descriptionTitle: "일하다가 잠깐 쉬고 싶을 때",
+      descriptionBody: "커피를 마시거나 잠깐 쉬고 싶을 때 쓰는 멤버 전용 공용 공간입니다. 간단한 간식이나 식사도 이곳에서 편하게 할 수 있어요.",
+      practicalInfo: [
+        { label: "이용", text: "오디워크룸 입주 멤버 전용" },
+        { label: "포함", text: "소파, 커피와 차, 간식, 냉장고" },
+        { label: "안내", text: "냄새가 강하지 않은 간단한 음식 위주로 이용해 주세요." }
+      ],
       details: [
         {
           emoji: "🌊",
@@ -182,7 +291,7 @@ export const ODI_CONTENT = {
         {
           emoji: "🍱",
           title: "가벼운 식사와 간식",
-          text: "너무 냄새나지 않는 간단한 음식은 라운지에서 편하게 드실 수 있습니다. 냉장고와 전자레인지가 구비되어 있어 도시락이나 샌드위치를 즐기기 좋습니다."
+          text: "너무 냄새나지 않는 간단한 음식은 라운지에서 편하게 드실 수 있습니다. 냉장고가 있어 음료나 간식을 잠시 보관하기 좋습니다."
         },
         {
           emoji: "☕️",
@@ -199,11 +308,12 @@ export const ODI_CONTENT = {
     }
   ],
   extraServices: [
-    { name: "개인 사물함", price: "월 20,000원", desc: "무거운 짐을 안전하게 보관하세요." },
+    { name: "사물함", price: "월 20,000원", desc: "무거운 짐을 안전하게 보관하세요." },
+    { name: "월주차", price: "월 33,000원", desc: "건물 주차장을 월 단위로 이용할 수 있습니다." },
     { name: "회의실 대여", price: "1시간 15,000원", desc: "입주 멤버는 1시간 10,000원" }
   ],
   community: {
-    title: "함께 성장하는 커뮤니티",
+    title: "가볍게 이어지는 커뮤니티",
     programs: [
       { name: "먼슬리뷰", desc: "한 달을 돌아보고 다음 달의 계획을 공유하는 정기 모임" },
       { name: "콘텐츠 커피챗", desc: "다양한 직군의 멤버들과 나누는 가벼운 지식 공유" }

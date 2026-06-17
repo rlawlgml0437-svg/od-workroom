@@ -4,11 +4,12 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   User, Briefcase, Home, GraduationCap, MapPin, 
   Instagram, MessageCircle, ArrowRight, Menu, X,
   LayoutDashboard, Bell, Settings, LogOut, Plus, Edit2, Trash2,
-  ChevronLeft, ClipboardList, CheckCircle2, Lock, Upload
+  ChevronLeft, ChevronRight, ClipboardList, CheckCircle2, Lock, Upload
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ODI_CONTENT } from './constants/content';
@@ -948,8 +949,8 @@ const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | '
   );
 };
 
-const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialApply: () => void }) => (
-  <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-0 pb-16 pt-24 md:pb-20 md:pt-28">
+const Hero = ({ onTrialApply }: { onTrialApply: () => void }) => (
+  <section className="relative min-h-screen flex items-end justify-center overflow-hidden px-0 pb-[8vh] pt-24 md:pb-[9vh] md:pt-28 lg:pb-[10vh]">
     <div className="absolute inset-0 z-0">
       <video 
         src="/main%20video.mp4" 
@@ -959,13 +960,14 @@ const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialA
         className="w-full h-full object-cover"
       />
     </div>
+    <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/0 via-black/10 to-black/42" />
 
-    <div className="relative z-10 w-full max-w-4xl mx-auto px-6 text-center text-white">
+    <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center text-white">
       <motion.h1
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="mx-auto mb-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight text-white md:text-7xl"
+        className="mx-auto mb-6 text-4xl font-bold leading-tight tracking-tight text-white md:whitespace-nowrap md:text-5xl lg:text-[3.25rem]"
       >
         {ODI_CONTENT.hero.title}
       </motion.h1>
@@ -973,35 +975,278 @@ const Hero = ({ onSpaceTour, onTrialApply }: { onSpaceTour: () => void; onTrialA
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
-        className="mx-auto mb-7 max-w-2xl text-lg font-medium leading-relaxed text-white md:text-2xl"
+        className="mx-auto mb-9 text-lg font-medium leading-relaxed text-white md:whitespace-nowrap md:text-2xl"
       >
         {ODI_CONTENT.hero.subtitle}
       </motion.p>
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.45 }}
-        className="mb-9 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm font-semibold text-white md:text-base"
-      >
-        {ODI_CONTENT.hero.highlights.map((item, index) => (
-          <span key={item} className="flex items-center">
-            {index > 0 && <span className="mr-4 h-1 w-1 rounded-full bg-white/55" />}
-            {item}
-          </span>
-        ))}
-      </motion.div>
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.55 }}
-        className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4"
+        transition={{ delay: 0.45 }}
+        className="flex items-center justify-center"
       >
-        <button onClick={onSpaceTour} className="btn-primary bg-white border-white text-brand-point hover:bg-brand-point hover:text-white w-full sm:w-auto cursor-pointer">공간 둘러보기</button>
-        <button type="button" onClick={onTrialApply} className="btn-secondary bg-white/20 backdrop-blur-md border-white/30 text-white hover:bg-white hover:text-brand-point w-full sm:w-auto">1일 무료체험 신청</button>
+        <button type="button" onClick={onTrialApply} className="btn-primary border-white bg-white px-10 py-4 text-brand-point hover:bg-brand-point hover:text-white">
+          1일 무료체험 신청
+        </button>
       </motion.div>
     </div>
   </section>
 );
+
+type PhotoCarouselProps = {
+  images: string[];
+  title: string;
+  className?: string;
+  showOverlayTitle?: boolean;
+  badge?: string;
+};
+
+const PhotoCarousel = ({
+  images,
+  title,
+  className = '',
+  showOverlayTitle = false,
+  badge,
+}: PhotoCarouselProps) => {
+  const validImages = images.filter(Boolean);
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(0);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const hasMultipleImages = validImages.length > 1;
+  const currentImage = validImages[current];
+  const selectedImage = selectedImageIndex === null ? null : validImages[selectedImageIndex];
+  const isLightboxOpen = Boolean(selectedImage);
+  const indicatorClassName = showOverlayTitle
+    ? 'absolute right-4 top-4 z-10 flex items-center gap-1.5 rounded-full bg-white/60 px-2 py-1.5 shadow-sm backdrop-blur-sm'
+    : 'absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-white/60 px-2 py-1.5 shadow-sm backdrop-blur-sm';
+
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setSelectedImageIndex(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [isLightboxOpen]);
+
+  if (!validImages.length) return null;
+
+  const moveSlide = (step: number) => {
+    setDirection(step);
+    setCurrent((prev) => (prev + step + validImages.length) % validImages.length);
+  };
+
+  const moveModalSlide = (step: number) => {
+    if (selectedImageIndex === null) return;
+
+    setDirection(step);
+    const nextIndex = (selectedImageIndex + step + validImages.length) % validImages.length;
+    setSelectedImageIndex(nextIndex);
+    setCurrent(nextIndex);
+  };
+
+  const jumpToSlide = (index: number) => {
+    if (index === current) return;
+    setDirection(index > current ? 1 : -1);
+    setCurrent(index);
+  };
+
+  const jumpToModalSlide = (index: number) => {
+    if (index === selectedImageIndex) return;
+    setDirection(selectedImageIndex === null || index > selectedImageIndex ? 1 : -1);
+    setSelectedImageIndex(index);
+    setCurrent(index);
+  };
+
+  const lightbox = (
+    <AnimatePresence>
+      {selectedImage && (
+        <motion.div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/88 p-4 backdrop-blur-sm md:p-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setSelectedImageIndex(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setSelectedImageIndex(null)}
+            className="absolute right-4 top-4 z-30 flex h-11 w-11 items-center justify-center rounded-full bg-white text-brand-text shadow-xl transition-colors hover:text-brand-point md:right-8 md:top-8"
+            aria-label="사진 닫기"
+          >
+            <X size={22} />
+          </button>
+
+          {hasMultipleImages && (
+            <>
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  moveModalSlide(-1);
+                }}
+                className="absolute left-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-brand-text shadow-xl transition-all hover:bg-white hover:text-brand-point md:left-8 md:h-14 md:w-14"
+                aria-label={`${title} 확대 이전 사진`}
+              >
+                <ChevronLeft size={26} />
+              </button>
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  moveModalSlide(1);
+                }}
+                className="absolute right-3 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-brand-text shadow-xl transition-all hover:bg-white hover:text-brand-point md:right-8 md:h-14 md:w-14"
+                aria-label={`${title} 확대 다음 사진`}
+              >
+                <ChevronRight size={26} />
+              </button>
+            </>
+          )}
+
+          <div
+            className="relative flex h-[82vh] w-[92vw] max-w-6xl items-center justify-center"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <AnimatePresence initial={false} mode="wait">
+              <motion.img
+                key={selectedImage}
+                src={selectedImage}
+                alt={`${title} 확대 사진`}
+                initial={{
+                  opacity: 0,
+                  scale: 0.97,
+                  x: direction === 0 ? 0 : direction > 0 ? 34 : -34,
+                }}
+                animate={{ opacity: 1, scale: 1, x: 0 }}
+                exit={{
+                  opacity: 0,
+                  scale: 0.97,
+                  x: direction === 0 ? 0 : direction > 0 ? -34 : 34,
+                }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="max-h-full max-w-full rounded-[24px] object-contain shadow-2xl"
+              />
+            </AnimatePresence>
+          </div>
+
+          {hasMultipleImages && selectedImageIndex !== null && (
+            <div
+              className="absolute bottom-4 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-white/60 px-2 py-1.5 shadow-sm backdrop-blur-sm md:bottom-6"
+              onClick={(event) => event.stopPropagation()}
+            >
+              {validImages.map((image, index) => (
+                <button
+                  key={`modal-${image}-${index}`}
+                  type="button"
+                  onClick={() => jumpToModalSlide(index)}
+                  className={`h-1.5 rounded-full transition-all ${
+                    index === selectedImageIndex ? 'w-4 bg-brand-point/60' : 'w-1.5 bg-gray-400/45 hover:bg-gray-500/60'
+                  }`}
+                  aria-label={`${title} 확대 ${index + 1}번째 사진 보기`}
+                />
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+
+  return (
+    <>
+      <div className={`relative overflow-hidden rounded-[30px] bg-gray-100 ${className}`}>
+        <button
+          type="button"
+          onClick={() => setSelectedImageIndex(current)}
+          className="group block aspect-[4/3] w-full cursor-zoom-in overflow-hidden"
+          aria-label={`${title} 사진 크게 보기`}
+        >
+          <AnimatePresence initial={false} mode="wait">
+            <motion.img
+              key={currentImage}
+              src={currentImage}
+              alt={`${title} 사진 ${current + 1}`}
+              loading="lazy"
+              decoding="async"
+              initial={{
+                opacity: 0,
+                x: direction === 0 ? 0 : direction > 0 ? 36 : -36,
+              }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{
+                opacity: 0,
+                x: direction === 0 ? 0 : direction > 0 ? -36 : 36,
+              }}
+              transition={{ duration: 0.28, ease: 'easeOut' }}
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+          </AnimatePresence>
+        </button>
+
+        {showOverlayTitle && (
+          <>
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-1/2 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+            <div className="pointer-events-none absolute bottom-7 left-7 z-[2]">
+              {badge && (
+                <span className="badge-label mb-2 inline-block bg-white text-brand-point">
+                  {badge}
+                </span>
+              )}
+              <h3 className="text-2xl font-bold text-white md:text-3xl">{title}</h3>
+            </div>
+          </>
+        )}
+
+        {hasMultipleImages && (
+          <>
+            <button
+              type="button"
+              onClick={() => moveSlide(-1)}
+              className="absolute left-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-brand-text shadow-lg transition-all hover:bg-white hover:text-brand-point"
+              aria-label={`${title} 이전 사진`}
+            >
+              <ChevronLeft size={22} />
+            </button>
+            <button
+              type="button"
+              onClick={() => moveSlide(1)}
+              className="absolute right-4 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-brand-text shadow-lg transition-all hover:bg-white hover:text-brand-point"
+              aria-label={`${title} 다음 사진`}
+            >
+              <ChevronRight size={22} />
+            </button>
+            <div className={indicatorClassName}>
+              {validImages.map((image, index) => (
+                <button
+                  key={`${image}-${index}`}
+                  type="button"
+                  onClick={() => jumpToSlide(index)}
+                  className={`h-1.5 rounded-full transition-all ${
+                    index === current ? 'w-4 bg-brand-point/60' : 'w-1.5 bg-gray-400/45 hover:bg-gray-500/60'
+                  }`}
+                  aria-label={`${title} ${index + 1}번째 사진 보기`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {typeof document !== 'undefined' ? createPortal(lightbox, document.body) : lightbox}
+    </>
+  );
+};
 
 const SpaceDetail = ({ onTrialApply }: { onTrialApply: () => void }) => {
   useEffect(() => {
@@ -1017,50 +1262,42 @@ const SpaceDetail = ({ onTrialApply }: { onTrialApply: () => void }) => {
     >
       <div className="max-w-5xl mx-auto px-6 pt-16">
         <SectionTitle 
-          title="가장 나다운 몰입이 시작되는 곳" 
-          subtitle="오디워크룸의 모든 좌석은 당신의 성장을 위해 정교하게 설계되었습니다."
+          title="공간 소개" 
+          subtitle="자리마다 쓰임이 조금씩 달라요. 내 일하는 방식에 맞는 공간을 골라보세요."
         />
 
-        <div className="space-y-32">
+        <div className="space-y-24">
           {ODI_CONTENT.pricing.map((plan: any, idx: number) => (
-            <div key={idx} className={`flex flex-col ${idx % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} gap-16 items-start`}>
+            <div key={idx} className={`flex flex-col ${idx % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} gap-10 md:gap-14 items-start`}>
               <div className="w-full md:w-1/2">
-                <div className="aspect-[4/3] rounded-[40px] overflow-hidden shadow-2xl relative group">
-                  <img 
-                    src={plan.image} 
-                    alt={plan.type} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60"></div>
-                  <div className="absolute bottom-8 left-8">
-                    <span className="badge-label bg-white text-brand-point mb-2 inline-block">Option {idx + 1}</span>
-                    <h3 className="text-white text-3xl font-bold">{plan.type}</h3>
-                  </div>
-                </div>
+                <PhotoCarousel
+                  images={plan.galleryImages || [plan.image]}
+                  title={plan.type}
+                  className="rounded-[40px] shadow-2xl"
+                />
               </div>
 
-              <div className="w-full md:w-1/2 space-y-8 py-4">
+              <div className="w-full md:w-1/2 space-y-6 py-2">
                 <div>
-                  <p className="text-brand-point text-sm font-bold uppercase tracking-widest mb-4">{plan.benefit}</p>
-                  <h3 className="text-3xl font-bold mb-6 leading-tight">{plan.descriptionTitle}</h3>
-                  <p className="text-gray-500 leading-relaxed whitespace-pre-line font-light">
+                  <p className="text-brand-point text-sm font-bold uppercase tracking-widest mb-3">{plan.benefit}</p>
+                  <h3 className="text-2xl md:text-3xl font-bold mb-4 leading-tight whitespace-pre-line">{plan.descriptionTitle}</h3>
+                  <p className="text-gray-500 leading-relaxed font-light">
                     {plan.descriptionBody}
                   </p>
                 </div>
 
-                <div className="space-y-8 pt-4">
-                  {plan.details?.map((detail: any, dIdx: number) => (
-                    <div key={dIdx} className="flex gap-4">
-                      <div className="text-2xl pt-1">{detail.emoji}</div>
-                      <div>
-                        <h4 className="font-bold text-lg mb-2">{detail.title}</h4>
-                        <p className="text-gray-500 text-sm leading-relaxed font-light">{detail.text}</p>
+                {plan.practicalInfo && (
+                  <div className="divide-y divide-gray-100 rounded-3xl border border-gray-100 bg-white px-5 shadow-sm">
+                    {plan.practicalInfo.map((info: any) => (
+                      <div key={info.label} className="grid gap-2 py-4 sm:grid-cols-[72px_1fr]">
+                        <p className="text-xs font-bold uppercase tracking-widest text-brand-point">{info.label}</p>
+                        <p className="text-sm leading-relaxed text-gray-600">{info.text}</p>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
 
-                <div className="pt-8 flex space-x-4">
+                <div className="pt-4 flex space-x-4">
                    <a href={ODI_CONTENT.brand.contact.kakao} className="btn-primary flex-1 text-center py-4">
                       {plan.buttonText}
                    </a>
@@ -1075,8 +1312,8 @@ const SpaceDetail = ({ onTrialApply }: { onTrialApply: () => void }) => {
         
         <div className="mt-40 bg-white p-12 md:p-20 rounded-[60px] text-center border border-gray-100 shadow-sm">
            <SectionTitle 
-              title="지금 바로 경험해보세요" 
-              subtitle="백문이 불여일견, 오디워크룸의 온기를 직접 느껴보시는 건 어떨까요?"
+              title="먼저 하루 써보세요" 
+              subtitle="사진보다 확실한 건 직접 앉아보는 거니까요."
            />
            <div className="flex flex-col sm:flex-row justify-center gap-6">
               <button type="button" onClick={onTrialApply} className="btn-primary py-4 px-12">
@@ -1158,7 +1395,7 @@ const Audience = () => {
       <div className="max-w-7xl mx-auto px-6">
         <SectionTitle 
           title="어떤 분들이 오시나요?" 
-          subtitle="우리는 서로 다른 일을 하지만, '성장'이라는 하나의 공통점으로 연결되어 있습니다."
+          subtitle="혼자 일하지만 집이나 카페만으로는 아쉬웠던 분들이 많이 찾아옵니다."
         />
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {ODI_CONTENT.targetAudience?.map((item, idx) => (
@@ -1232,12 +1469,48 @@ const Atmosphere = () => (
   </section>
 );
 
+const SpacePhotoGallery = () => (
+  <section className="py-24 bg-brand-bg overflow-hidden">
+    <div className="max-w-7xl mx-auto px-6">
+      <SectionTitle
+        title="공간의 장면들"
+        subtitle="사진으로 먼저 둘러보는 오디워크룸의 좌석, 쉼, 시설, 커뮤니티"
+      />
+
+      <div className="grid items-start gap-8 md:grid-cols-2">
+        {ODI_CONTENT.photoGallery?.map((item: any, index: number) => (
+          <motion.article
+            key={item.title}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.06 }}
+            className="flex h-full flex-col overflow-hidden rounded-[32px] bg-white shadow-sm ring-1 ring-gray-100 transition-all hover:-translate-y-1 hover:shadow-xl"
+          >
+            <div className="bg-white p-2">
+              <PhotoCarousel
+                images={item.images}
+                title={item.title}
+                className="rounded-[24px]"
+              />
+            </div>
+            <div className="flex-1 border-t border-gray-100 bg-white p-6 md:p-7">
+              <p className="mb-3 text-base font-bold text-brand-point">{item.title}</p>
+              <p className="text-sm leading-relaxed text-gray-600 md:text-base">{item.desc}</p>
+            </div>
+          </motion.article>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
 const Pricing = ({ onMoreDetail }: { onMoreDetail: () => void }) => (
   <section id="pricing" className="py-24 bg-brand-bg">
     <div className="max-w-7xl mx-auto px-6">
       <SectionTitle 
         title="나에게 딱 맞는 이용권"
-        subtitle="나의 작업 스타일과 루틴에 맞춰 최적의 옵션을 선택하세요."
+        subtitle="얼마나 자주, 어떤 방식으로 일하는지에 맞춰 골라보세요."
       />
       
       <div className="max-w-4xl mx-auto mb-12 text-center">
@@ -1312,7 +1585,7 @@ const Pricing = ({ onMoreDetail }: { onMoreDetail: () => void }) => (
             </a>
           </div>
           <div className="relative min-h-[260px] overflow-hidden bg-brand-blue-light">
-            <img src="/DSCF3842%20copy.jpg" alt="오디워크룸 전용석" className="h-full w-full object-cover" />
+            <img src="/photos/web/dedicated-seat-004.webp" alt="오디워크룸 전용석" className="h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-brand-text/55 to-transparent" />
             <div className="absolute bottom-6 left-6 rounded-2xl bg-white/90 px-5 py-3 text-sm font-bold text-brand-text shadow-lg backdrop-blur-md">
               24시간 이용 가능한 고정 작업석
@@ -2260,10 +2533,11 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Hero onSpaceTour={() => setView('space-detail')} onTrialApply={() => setIsTrialApplicationOpen(true)} />
+            <Hero onTrialApply={() => setIsTrialApplicationOpen(true)} />
             <Introduction />
             <Audience />
             <Atmosphere />
+            <SpacePhotoGallery />
             <Pricing onMoreDetail={() => setView('pricing-detail')} />
             {/* Community Section Integration */}
             <section className="py-24 bg-white">
