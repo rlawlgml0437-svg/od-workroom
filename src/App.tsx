@@ -37,6 +37,9 @@ const FORM_NOTIFICATION_EMAIL = 'rlawlgml0437@gmail.com';
 declare global {
   interface Window {
     fbq?: (...args: unknown[]) => void;
+    karrotPixel?: {
+      track?: (eventName: string, properties?: Record<string, unknown>) => void;
+    };
   }
 }
 
@@ -57,6 +60,16 @@ const trackMetaTrialReservation = (trialDateTime: string) => {
     content_category: '체험 예약',
     value: 0.0,
     currency: 'KRW',
+    trial_date: trialDateTime,
+  });
+};
+
+const trackKarrotTrialReservation = (trialDateTime: string) => {
+  if (typeof window === 'undefined' || typeof window.karrotPixel?.track !== 'function') return;
+
+  window.karrotPixel.track('Lead', {
+    content_name: '1일 무료체험',
+    content_category: '체험 예약',
     trial_date: trialDateTime,
   });
 };
@@ -673,6 +686,7 @@ const TrialApplicationModal = ({
 
       await addDoc(collection(db, 'registrations'), registrationData);
       trackMetaTrialReservation(trialDateTime);
+      trackKarrotTrialReservation(trialDateTime);
 
       try {
         await sendRegistrationEmail({
