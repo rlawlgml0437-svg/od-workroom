@@ -2439,6 +2439,25 @@ export default function App() {
   const [isTrialApplicationOpen, setIsTrialApplicationOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState('');
 
+  // 2026-09-18 대표 지시: 1일 체험 신청 버튼 → 홈페이지 신청폼 대신 네이버 예약으로 직접 연결.
+  // 광고 측정이 끊기지 않게 클릭 시 Lead(잠재고객) 픽셀은 발화한다. 단 실제 예약 완료(Schedule)는
+  // 네이버에서 일어나므로 여기서는 넣지 않는다 — 예약 전환은 naver_sync로 별도 집계된다.
+  const handleTrialClick = () => {
+    if (typeof window === 'undefined') return;
+    if (typeof window.fbq === 'function') {
+      window.fbq('track', 'Lead', {
+        content_name: '1일 무료체험',
+        content_category: '체험 예약(네이버)',
+        value: 0.0,
+        currency: 'KRW',
+      });
+    }
+    if (typeof window.karrotPixel?.track === 'function') {
+      window.karrotPixel.track('Lead', { content_name: '1일 무료체험', content_category: '체험 예약(네이버)' });
+    }
+    window.open(ODI_CONTENT.brand.contact.trial, '_blank', 'noopener,noreferrer');
+  };
+
   useEffect(() => {
     const syncViewFromHash = () => {
       const hashView = window.location.hash.replace('#', '');
@@ -2524,7 +2543,7 @@ export default function App() {
             exit={{ opacity: 0, scale: 1.02 }}
             transition={{ duration: 0.4 }}
           >
-            <SpaceDetail onTrialApply={() => setIsTrialApplicationOpen(true)} />
+            <SpaceDetail onTrialApply={handleTrialClick} />
           </motion.div>
         )}
 
@@ -2547,7 +2566,7 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <Hero onTrialApply={() => setIsTrialApplicationOpen(true)} />
+            <Hero onTrialApply={handleTrialClick} />
             <Introduction />
             <Audience />
             <Atmosphere />
