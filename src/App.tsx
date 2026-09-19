@@ -2367,7 +2367,7 @@ const PricingDetail = () => {
                       <span className="font-bold text-gray-700">{p.label}</span>
                       {p.tag && <span className="text-[10px] bg-brand-point/10 text-brand-point font-bold px-2 py-0.5 rounded-full">{p.tag}</span>}
                     </div>
-                    <span className="font-bold text-brand-text">{p.price} <span className="text-[10px] text-gray-400 font-normal">/월</span></span>
+                    <span className="font-bold text-brand-text">{p.price} <span className="text-[10px] text-gray-400 font-normal">{plan.priceSuffix ?? '/월'}</span></span>
                   </div>
                 ))}
               </div>

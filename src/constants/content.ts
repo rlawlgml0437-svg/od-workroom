@@ -260,6 +260,53 @@ export const ODI_CONTENT = {
       ]
     },
     {
+      type: "비상주 사무실",
+      benefit: "사업자 주소가 필요할 때",
+      price: "180,000~",
+      period: "/6개월",
+      priceSuffix: " (총액)",
+      buttonText: "비상주 문의하기",
+      image: "/photos/web/community-001.webp",
+      galleryImages: [
+        "/photos/web/community-001.webp",
+        "/photos/web/community-003.webp"
+      ],
+      descriptionTitle: "김포 운양동 주소로\n사업자등록을 시작하세요.",
+      descriptionBody: "자리를 쓰지 않고 사업자 주소지와 우편물 수령만 필요한 분을 위한 비상주 사무실입니다. 예비창업자, 온라인 셀러, 1인 사업자분들이 김포 비상주 사무실로 이용하고 있어요.",
+      practicalInfo: [
+        { label: "추천", text: "사업자등록 주소지와 우편물 관리가 필요한 1인 사업자·온라인 셀러" },
+        { label: "포함", text: "사업자 주소지 등록, 우편물·택배 수령 및 알림" },
+        { label: "안내", text: "좌석 이용은 포함되지 않으며, 회의실은 별도 요금으로 이용할 수 있습니다." }
+      ],
+      periods: [
+        { label: "6개월", price: "180,000원" },
+        { label: "12개월", price: "240,000원", tag: "최대할인" }
+      ],
+      details: [
+        {
+          emoji: "📮",
+          title: "우편물은 저희가 받아드려요",
+          text: "등기와 택배가 도착하면 바로 알려드립니다. 필요할 때 방문해서 찾아가시면 됩니다."
+        },
+        {
+          emoji: "🏢",
+          title: "운양역 1분, 김포한강1로 주소",
+          text: "김포 운양동 중심 상권의 주소를 사업자등록 소재지로 사용하실 수 있습니다."
+        },
+        {
+          emoji: "🪑",
+          title: "필요하면 자리도, 회의실도",
+          text: "미팅이 잡히면 회의실을 시간 단위로, 작업이 필요한 날은 자유석 1일권으로 함께 이용할 수 있어요."
+        }
+      ],
+      features: [
+        "사업자등록용 주소 제공",
+        "우편물·택배 수령 알림",
+        "6개월·12개월 단위 계약",
+        "회의실·자유석 추가 이용 가능"
+      ]
+    },
+    {
       type: "휴게 라운지",
       benefit: "쉼이 있는 몰입을 위해",
       price: "FREE",
