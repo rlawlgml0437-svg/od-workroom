@@ -141,7 +141,7 @@ export const ODI_CONTENT = {
     "유튜버", "개발자", "디자이너", "영상PD", "브랜드 운영가", "작가", "번역가", "마케터"
   ],
   pricingProps: {
-    disclaimer: "3개월 이상 계약 시 할인 혜택이 제공됩니다."
+    disclaimer: "3개월 이상 계약 시 할인 혜택이 제공됩니다 · 모든 이용권 가격은 VAT 별도입니다."
   },
   dedicatedSeatPromo: {
     eyebrow: "Dedicated Desk",
