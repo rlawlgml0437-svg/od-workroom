@@ -43,6 +43,30 @@ declare global {
   }
 }
 
+// 2026-09-19: 인스타 광고 → 인앱 브라우저에서는 네이버 로그인이 안 돼 있어 예약 페이지에서 전원 이탈(9/16~18 클릭 36 → 예약 0).
+// 모바일은 네이버 앱 딥링크로 열어 로그인된 상태로 예약 페이지에 진입시키고, 앱이 없으면 2초 후 웹으로 폴백한다.
+const openNaverBooking = (url: string) => {
+  const ua = navigator.userAgent || '';
+  const enc = encodeURIComponent(url);
+  let deep: string | null = null;
+  if (/Android/i.test(ua)) {
+    deep = `intent://inappbrowser?url=${enc}&target=new&version=6#Intent;scheme=naversearchapp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.search;S.browser_fallback_url=${enc};end`;
+  } else if (/iPhone|iPad|iPod/i.test(ua)) {
+    deep = `naversearchapp://inappbrowser?url=${enc}&target=new&version=6`;
+  }
+  if (!deep) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+    return;
+  }
+  let left = false;
+  const gone = () => { left = true; };
+  document.addEventListener('visibilitychange', () => { if (document.hidden) gone(); });
+  window.addEventListener('pagehide', gone);
+  window.addEventListener('blur', gone);
+  window.setTimeout(() => { if (!left && !document.hidden) window.location.href = url; }, 2000);
+  window.location.href = deep;
+};
+
 const trackMetaTrialReservation = (trialDateTime: string) => {
   if (typeof window === 'undefined' || typeof window.fbq !== 'function') return;
 
@@ -2455,7 +2479,7 @@ export default function App() {
     if (typeof window.karrotPixel?.track === 'function') {
       window.karrotPixel.track('Lead', { content_name: '1일 무료체험', content_category: '체험 예약(네이버)' });
     }
-    window.open(ODI_CONTENT.brand.contact.trial, '_blank', 'noopener,noreferrer');
+    openNaverBooking(ODI_CONTENT.brand.contact.trial);
   };
 
   useEffect(() => {
