@@ -11,6 +11,13 @@ export const ODI_CONTENT = {
     slogan: "혼자 일하지만 고립되지 않는 곳",
     location: "경기도 김포시 김포한강1로 230, 801호",
     phone: "010-4668-5405",
+    // 사업자 정보 (2026-09-21) — 네이버 GFA 비즈채널 심사: 광고계정 등록 정보와 사이트 하단 표기 일치 필수
+    business: {
+      company: "오디워크룸 커뮤니티 공유오피스",
+      ceo: "김지희",
+      registrationNumber: "529-23-02357",
+      address: "경기도 김포시 김포한강1로 230, 801호",
+    },
     contact: {
       kakao: "https://pf.kakao.com/_xkwkgn",
       instagram: "https://www.instagram.com/od.workroom",

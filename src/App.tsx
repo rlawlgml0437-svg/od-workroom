@@ -1743,7 +1743,17 @@ const Footer = ({ onViewChange }: { onViewChange: (view: any) => void }) => {
           </ul>
         </div>
       </div>
-      <div className="pt-12 text-xs flex justify-between items-center text-white/30">
+      <div className="pt-10 text-xs text-white/40 leading-relaxed space-y-1">
+        <p>
+          <span className="text-white/60">{ODI_CONTENT.brand.business.company}</span>
+          <span className="mx-2 text-white/20">|</span>
+          대표 {ODI_CONTENT.brand.business.ceo}
+          <span className="mx-2 text-white/20">|</span>
+          사업자등록번호 {ODI_CONTENT.brand.business.registrationNumber}
+        </p>
+        <p>{ODI_CONTENT.brand.business.address}</p>
+      </div>
+      <div className="pt-6 text-xs flex justify-between items-center text-white/30">
         <p>
           © 2026 {ODI_CONTENT.brand.engName}. All rights reserved
           <button
