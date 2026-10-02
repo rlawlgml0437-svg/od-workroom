@@ -2,8 +2,14 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>오디워크룸 1일 체험 — 운양역 도보 1분</title>
+<meta name="description" content="김포 운양역 도보 1분, 한강뷰 24시 코워킹스페이스. 프리랜서·1인 사업자가 모여 일합니다. 자유석 1일 무료 체험.">
+<meta name="theme-color" content="#F9F9F8">
+<link rel="icon" href="/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -19,75 +25,260 @@ fbq('track', 'ViewContent', {content_name: 'trial_bridge'});
 try { window.karrotPixel.init('1783049107774627000'); window.karrotPixel.track('ViewPage'); } catch(e) {}
 </script>
 <style>
-:root { --accent: #7B87F5; --ink: #1c1c1e; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; color: var(--ink);
-       background: #fafafa; display: flex; min-height: 100vh; align-items: center; justify-content: center; }
-.card { max-width: 420px; width: 100%; padding: 40px 28px 32px; text-align: center; }
-.badge { display: inline-block; background: var(--accent); color: #fff; border-radius: 999px;
-         padding: 6px 14px; font-size: 13px; font-weight: 700; letter-spacing: .3px; margin-bottom: 18px; }
-.heroes { display: flex; align-items: flex-start; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; margin-bottom: 16px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
-.heroes::-webkit-scrollbar { display: none; }
-.heroes img { flex: 0 0 auto; width: 88%; min-width: 0; max-width: 88%; aspect-ratio: 1 / 1; height: auto; object-fit: cover; border-radius: 14px; scroll-snap-align: center; }
-h1 { font-size: 26px; line-height: 1.35; margin-bottom: 12px; word-break: keep-all; }
-p.sub { font-size: 15px; line-height: 1.6; color: #555; margin-bottom: 22px; word-break: keep-all; }
-ul.perks { list-style: none; margin-bottom: 26px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-ul.perks li { background: #fff; border: 1px solid #ececf2; border-radius: 10px; padding: 10px 6px; font-size: 13px; }
-.pricing { background: #fff; border: 1px solid #ececf2; border-radius: 12px; padding: 16px 18px; margin-bottom: 20px; text-align: left; }
-.pricing .free { font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
-.pricing .lead { font-size: 12px; color: #888; margin-bottom: 10px; }
-.pricing dl { display: grid; grid-template-columns: 1fr auto; gap: 7px 12px; font-size: 14px; }
-.pricing dt { color: #555; }
-.pricing dd { font-weight: 700; text-align: right; }
-.pricing .more { font-size: 12px; color: #999; margin-top: 11px; line-height: 1.5; }
-.cta { display: block; width: 100%; background: #03c75a; color: #fff; text-decoration: none;
-       font-size: 17px; font-weight: 700; border-radius: 12px; padding: 16px 0; margin-bottom: 12px; }
-.note { font-size: 12px; color: #999; line-height: 1.5; }
-.bizinfo { margin-top: 26px; padding-top: 16px; border-top: 1px solid #ececf2;
-           font-size: 11px; color: #aaa; line-height: 1.7; text-align: left; }
-.loc { font-size: 13px; color: #777; margin-bottom: 20px; }
+:root{
+  /* 본 사이트 src/index.css 와 동일한 브랜드 토큰 */
+  --bg:#F9F9F8; --surface:#FFFFFF;
+  --point:#9FBAF1; --deep:#5B7CBE; --press:#4B6AA8; --tint:#F0F4FA;
+  --ink:#2B2E33; --soft:#5B6068; --muted:#8C9299; --line:#E8EBEF;
+  --shadow:0 1px 2px rgba(20,28,44,.04), 0 10px 30px rgba(20,28,44,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+img{display:block;max-width:100%}
+body{
+  font-family:"Inter","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:480px;margin:0 auto;background:var(--bg);overflow:hidden}
+.pad{padding-left:22px;padding-right:22px}
+
+/* ───────── 히어로: 사진 위에 메시지 ───────── */
+.hero{position:relative;color:#fff}
+.hero>img{width:100%;height:clamp(390px,76vh,560px);object-fit:cover;object-position:center 42%}
+.hero::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(176deg,rgba(18,24,38,.60) 0%,rgba(18,24,38,.18) 34%,rgba(18,24,38,.52) 68%,rgba(18,24,38,.88) 100%);
+}
+.hero .inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;padding:26px 22px 26px}
+.hero .logo{height:16px;width:auto;filter:brightness(0) invert(1);opacity:.95}
+.hero .copy{margin-top:auto}
+.eyebrow{
+  display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:#D7E3F7;margin-bottom:12px;
+}
+h1{
+  font-size:clamp(29px,8.4vw,35px);line-height:1.26;letter-spacing:-.03em;
+  font-weight:700;word-break:keep-all;text-shadow:0 2px 20px rgba(0,0,0,.3);
+}
+h1 .hl{color:#BFD3F3}
+.hero p{
+  margin-top:13px;font-size:14.5px;line-height:1.66;color:rgba(255,255,255,.9);
+  word-break:keep-all;text-shadow:0 1px 12px rgba(0,0,0,.35);
+}
+
+/* ───────── 예약 블록 ───────── */
+.book{margin-top:-26px;position:relative;z-index:3}
+.book .inner{
+  background:var(--surface);border-radius:20px;box-shadow:var(--shadow);
+  padding:18px 18px 16px;border:1px solid var(--line);
+}
+.promo{
+  display:flex;align-items:center;gap:10px;
+  background:var(--tint);border-radius:12px;padding:11px 13px;margin-bottom:13px;
+}
+.promo .pct{
+  flex:0 0 auto;background:var(--deep);color:#fff;font-size:13px;font-weight:700;
+  padding:5px 10px;border-radius:8px;letter-spacing:-.01em;
+}
+.promo .txt{font-size:12.8px;color:#3C4A63;word-break:keep-all;line-height:1.5}
+.promo .txt b{font-weight:700}
+.cta{
+  display:block;width:100%;text-align:center;text-decoration:none;
+  background:var(--deep);color:#fff;font-size:16.5px;font-weight:700;
+  letter-spacing:-.015em;border-radius:14px;padding:17px 0;
+  box-shadow:0 8px 20px rgba(91,124,190,.26);transition:transform .14s,background .14s;
+}
+.cta:active{background:var(--press);transform:scale(.985)}
+.undercta{text-align:center;font-size:12px;color:var(--muted);margin-top:10px}
+
+/* ───────── 섹션 ───────── */
+section{margin-top:40px}
+.kicker{
+  font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--point);margin-bottom:9px;
+}
+h2{font-size:20px;line-height:1.4;letter-spacing:-.025em;font-weight:700;word-break:keep-all}
+h2+.sub{margin-top:8px;font-size:14px;color:var(--soft);word-break:keep-all}
+
+/* 갤러리 */
+.gallery{margin-top:16px}
+.track{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 22px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.track::-webkit-scrollbar{display:none}
+.track figure{flex:0 0 76%;scroll-snap-align:center}
+.track img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:var(--tint)}
+.track figcaption{margin-top:8px;font-size:12.5px;color:var(--soft);font-weight:500}
+.dots{display:flex;justify-content:center;gap:5px;margin-top:14px}
+.dots i{width:5px;height:5px;border-radius:99px;background:#D8DDE4;transition:.25s}
+.dots i.on{background:var(--deep);width:17px}
+
+/* 혜택 */
+.perks{list-style:none;margin-top:16px;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;grid-template-columns:1fr 1fr}
+.perks li{background:var(--surface);padding:16px 14px;font-size:14px;font-weight:500;word-break:keep-all}
+.perks li span{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+
+/* 가격 */
+.price{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:6px 18px 16px;box-shadow:var(--shadow)}
+.prow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.prow:last-of-type{border-bottom:0}
+.prow .nm{font-size:14.5px;color:var(--soft)}
+.prow .amt{font-size:15px;font-weight:700;white-space:nowrap;text-align:right}
+.prow .was{display:block;font-size:12px;color:var(--muted);font-weight:400;text-decoration:line-through;line-height:1.3}
+.prow .now{color:var(--deep)}
+.pnote{font-size:11.8px;color:var(--muted);line-height:1.65;padding-top:12px;border-top:1px solid var(--line);margin-top:2px}
+
+/* 방문 안내 */
+.facts{list-style:none;margin-top:16px}
+.facts li{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px;word-break:keep-all}
+.facts li:last-child{border-bottom:0}
+.facts .k{flex:0 0 76px;color:var(--muted);font-size:13px}
+.facts .v{font-weight:500}
+
+/* 문자 보조 경로 */
+.smsfall{display:none;margin-top:14px;background:var(--tint);border-radius:16px;padding:16px}
+.smsfall.on{display:block}
+.smsfall p{font-size:13.5px;color:#3C4A63;word-break:keep-all;margin-bottom:12px}
+.smsfall a{display:block;text-align:center;text-decoration:none;background:var(--surface);
+  border:1.5px solid var(--deep);color:var(--deep);font-size:15px;font-weight:700;
+  border-radius:12px;padding:14px 0}
+.smsfall a:active{background:#E7EEF9}
+.smsfall .tiny{font-size:11.5px;color:var(--muted);margin:10px 0 0}
+
+/* 푸터 */
+.place{margin-top:40px;padding:20px 0;border-top:1px solid var(--line);text-align:center}
+.place b{display:block;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.place span{display:block;font-size:13px;color:var(--soft);margin-top:4px}
+footer{padding:16px 0 46px;font-size:11px;color:var(--muted);line-height:1.8}
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="badge">OD WORKROOM</div>
-  <h1>운양역 도보 1분,<br>한강뷰 24시 워크라운지</h1>
-  <div class="heroes"><img src="/trial/hero1.jpg" alt="자유석"><img src="/trial/hero2.jpg" alt="한강뷰 라운지"><img src="/trial/hero3.jpg" alt="전용석"><img src="/trial/hero4.jpg" alt="커피 바"></div>
-  <p class="sub">자유석 1일 체험으로 먼저 경험해보세요.<br>투어 후 하루 종일 자유롭게 이용하실 수 있어요.</p>
-  <a class="cta" href="#" data-book>자유석 무료 체험 예약</a>
-  <ul class="perks">
-    <li>24시 워크라운지</li><li>한강뷰 라운지</li>
-    <li>커피·간식 무료</li><li>프리랜서 네트워킹</li>
-  </ul>
-  <div class="pricing">
-    <p class="free">체험은 무료입니다</p>
-    <p class="lead">이어서 이용하실 경우 (VAT 별도)</p>
-    <dl>
-      <dt>자유석 1일권</dt><dd>20,000원</dd>
-      <dt>자유석 1개월권</dt><dd>170,000원</dd>
-      <dt>전용석 1개월권</dt><dd>320,000원</dd>
-    </dl>
-    <p class="more">2주·야간·주말권과 비상주 사무실도 있어요</p>
+<div class="page">
+
+  <!-- ───────── 히어로 ───────── -->
+  <div class="hero">
+    <img src="/photos/web/community-002.webp" alt="창가 자유석에서 각자 일하는 멤버들" fetchpriority="high" decoding="async">
+    <div class="inner">
+      <img class="logo" src="/logo.svg" alt="오디워크룸">
+      <div class="copy">
+        <span class="eyebrow">김포 운양역 1분</span>
+        <h1>혼자 일하지만,<br><span class="hl">혼자 있고 싶진 않다면</span></h1>
+        <p>프리랜서·1인 사업자가 모여 일하는 한강뷰 24시 코워킹스페이스.<br>하루 써보고 정하세요.</p>
+      </div>
+    </div>
   </div>
-  <p class="loc">📍 김포한강1로 230, 801호 (운양역 4번 출구 도보 1분)</p>
-  <p class="note">체험 당일 등록 시 첫 달 1만원 할인<br>(자유석·전용석 1개월권 한정)</p>
-  <div class="bizinfo">
-    상호 : 오디워크룸 커뮤니티 공유오피스<br>
-    대표자 : 김지희<br>
-    사업자등록번호 : 529-23-02357<br>
-    사업장 주소 : 경기도 김포시 김포한강1로 230, 801호
+
+  <!-- ───────── 예약 ───────── -->
+  <div class="book pad">
+    <div class="inner">
+      <div class="promo">
+        <span class="pct">20% 할인</span>
+        <span class="txt">체험 당일 등록하시면 <b>첫 달 20% 할인</b>을 드려요</span>
+      </div>
+      <a class="cta" href="#" data-book data-pos="hero">자유석 1일 무료 체험 예약</a>
+      <p class="undercta">네이버 예약으로 연결돼요 · 1분이면 끝나요</p>
+    </div>
+  </div>
+
+  <!-- ───────── 공간 ───────── -->
+  <section>
+    <div class="pad">
+      <p class="kicker">Space</p>
+      <h2>8층 전체가 작업 공간이에요</h2>
+      <p class="sub">자유석부터 전용석, 한강이 보이는 라운지까지.</p>
+    </div>
+    <div class="gallery">
+      <div class="track" id="track">
+        <figure><img src="/photos/web/lounge-002.webp" alt="한강뷰 라운지" loading="lazy" decoding="async"><figcaption>한강이 보이는 라운지</figcaption></figure>
+        <figure><img src="/photos/web/community-004.webp" alt="밤에도 작업하는 멤버들" loading="lazy" decoding="async"><figcaption>24시간 — 밤에도 열려 있어요</figcaption></figure>
+        <figure><img src="/trial/hero3.jpg" alt="전용석" loading="lazy" decoding="async"><figcaption>짐 두고 다니는 전용석</figcaption></figure>
+        <figure><img src="/trial/hero4.jpg" alt="커피 바" loading="lazy" decoding="async"><figcaption>커피·간식은 무료</figcaption></figure>
+      </div>
+      <div class="dots" id="dots"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+  </section>
+
+  <!-- ───────── 혜택 ───────── -->
+  <section class="pad">
+    <p class="kicker">Included</p>
+    <h2>체험 하루, 이만큼 쓰세요</h2>
+    <ul class="perks">
+      <li>종일 자유석<span>시간 제한 없이</span></li>
+      <li>한강뷰 라운지<span>소파·미팅 공간</span></li>
+      <li>커피·간식<span>전부 무료</span></li>
+      <li>주차 4시간<span>무료 지원</span></li>
+    </ul>
+  </section>
+
+  <!-- ───────── 가격 ───────── -->
+  <section class="pad">
+    <p class="kicker">Price</p>
+    <h2>체험은 무료입니다</h2>
+    <p class="sub">마음에 드시면 그날 바로 등록하실 수 있어요.</p>
+    <div class="price">
+      <div class="prow"><span class="nm">자유석 1일권</span><span class="amt">20,000원</span></div>
+      <div class="prow"><span class="nm">자유석 1개월권</span>
+        <span class="amt"><span class="was">170,000원</span><span class="now">136,000원</span></span></div>
+      <div class="prow"><span class="nm">전용석 1개월권</span>
+        <span class="amt"><span class="was">320,000원</span><span class="now">256,000원</span></span></div>
+      <p class="pnote">표시된 할인가는 체험 당일 등록 시 첫 달 기준이에요 (VAT 별도).<br>2주·야간·주말권과 비상주 사무실도 있어요.</p>
+    </div>
+  </section>
+
+  <!-- ───────── 방문 안내 ───────── -->
+  <section class="pad">
+    <p class="kicker">Visit</p>
+    <h2>오시면 이렇게 진행돼요</h2>
+    <ul class="facts">
+      <li><span class="k">투어 시간</span><span class="v">평일 10:00 ~ 19:00</span></li>
+      <li><span class="k">진행</span><span class="v">공간 안내 후, 하루 종일 자유롭게 이용</span></li>
+      <li><span class="k">준비물</span><span class="v">노트북만 가져오시면 돼요</span></li>
+      <li><span class="k">주차</span><span class="v">4시간까지 무료 (월 정기권 33,000원)</span></li>
+    </ul>
+  </section>
+
+  <!-- ───────── 하단 예약 ───────── -->
+  <section class="pad">
+    <a class="cta" href="#" data-book data-pos="bottom">자유석 1일 무료 체험 예약</a>
+    <p class="undercta">체험 당일 등록 시 첫 달 20% 할인</p>
+
+    <div class="smsfall" id="smsfall">
+      <p>네이버 로그인이 번거로우시면, 문자로도 예약하실 수 있어요.</p>
+      <a href="sms:01049850437?body=%5B%EB%9E%9C%EB%94%A9%5D%20%EC%B2%B4%ED%97%98%20%EC%98%88%EC%95%BD%20%EB%AC%B8%EC%9D%98%EB%93%9C%EB%A6%BD%EB%8B%88%EB%8B%A4" data-smsfall>문자로 예약 문의하기</a>
+      <p class="tiny">확인 후 순차 답장드려요.</p>
+    </div>
+  </section>
+
+  <div class="pad">
+    <div class="place">
+      <b>김포한강1로 230, 801호</b>
+      <span>운양역 4번 출구에서 걸어서 1분</span>
+    </div>
+    <footer>
+      상호 : 오디워크룸 커뮤니티 공유오피스<br>
+      대표자 : 김지희<br>
+      사업자등록번호 : 529-23-02357<br>
+      사업장 주소 : 경기도 김포시 김포한강1로 230, 801호
+    </footer>
   </div>
 </div>
+
 <script>
 var BOOK_URL = 'https://m.booking.naver.com/booking/10/bizes/1603452/items/7482030?theme=place&lang=ko';
+
+/* ───────── 예약 버튼 ───────── */
 document.querySelectorAll('[data-book]').forEach(function(el){
   el.addEventListener('click', function(e){
     e.preventDefault();
-    try { fbq('track', 'Schedule', {content_name: 'naver_booking'}); } catch(err) {}
+    var pos = el.getAttribute('data-pos') || 'hero';
+    try { fbq('track', 'Schedule', {content_name: pos}); } catch(err) {}
+    /* 맞춤전환(Schedule 단위)은 합산을 유지하고, 상/하단 분리는 trackCustom 으로 본다. */
+    if (pos === 'bottom') { try { fbq('trackCustom', 'ScheduleBottom'); } catch(err) {} }
     try { window.karrotPixel.track('Lead'); } catch(err) {}
     setTimeout(openNaver, 250);
   });
 });
+
+/* 인스타 인앱브라우저는 네이버 로그인이 막히므로 앱으로 먼저 보낸다 */
 function openNaver(){
   var ua = navigator.userAgent || "", enc = encodeURIComponent(BOOK_URL), deep = null;
   if (/Android/i.test(ua)) deep = "intent://inappbrowser?url=" + enc + "&target=new&version=6#Intent;scheme=naversearchapp;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.search;S.browser_fallback_url=" + enc + ";end";
@@ -96,9 +287,50 @@ function openNaver(){
   var left = false, gone = function(){ if (!left) { left = true; try { fbq("trackCustom", "NaverAppOpened"); } catch(err) {} } };
   document.addEventListener("visibilitychange", function(){ if (document.hidden) gone(); });
   window.addEventListener("pagehide", gone); window.addEventListener("blur", gone);
-  setTimeout(function(){ if (!left && !document.hidden) { left = true; try { fbq("trackCustom", "NaverWebFallback"); } catch(err) {} setTimeout(function(){ window.location.href = BOOK_URL; }, 150); } }, 2000);
+  setTimeout(function(){
+    if (!left && !document.hidden) {
+      left = true;
+      try { fbq("trackCustom", "NaverWebFallback"); } catch(err) {}
+      markFallback();
+      setTimeout(function(){ window.location.href = BOOK_URL; }, 150);
+    }
+  }, 2000);
   window.location.href = deep;
 }
+
+/* ───────── 문자 보조 경로 ─────────
+   앱이 안 열려 웹으로 떨어진 사람에게만 표시를 남기고,
+   로그인 벽에서 포기하고 되돌아왔을 때 그 사람에게만 펼친다.
+   메인 경로에는 아무 마찰도 더하지 않는다. */
+function markFallback(){ try { sessionStorage.setItem('odi_naver_fallback','1'); } catch(e) {} }
+function showFallbackHelp(){
+  try { if (sessionStorage.getItem('odi_naver_fallback') !== '1') return; } catch(e) { return; }
+  var box = document.getElementById('smsfall');
+  if (!box || box.classList.contains('on')) return;
+  box.classList.add('on');
+  try { fbq('trackCustom', 'SmsFallbackShown'); } catch(err) {}
+  try { box.scrollIntoView({behavior:'smooth', block:'center'}); } catch(e) {}
+}
+window.addEventListener('pageshow', showFallbackHelp);
+document.addEventListener('DOMContentLoaded', showFallbackHelp);
+var sfl = document.querySelector('[data-smsfall]');
+if (sfl) sfl.addEventListener('click', function(){
+  try { fbq('trackCustom','SmsFallbackClick'); } catch(err) {}
+  try { window.karrotPixel.track('Lead'); } catch(err) {}
+});
+
+/* ───────── 갤러리 인디케이터 ───────── */
+(function(){
+  var tr = document.getElementById('track'), dots = document.getElementById('dots');
+  if (!tr || !dots) return;
+  var items = dots.querySelectorAll('i');
+  tr.addEventListener('scroll', function(){
+    var i = Math.round(tr.scrollLeft / (tr.scrollWidth / items.length));
+    items.forEach(function(d, n){ d.classList.toggle('on', n === Math.min(i, items.length - 1)); });
+  }, {passive:true});
+})();
+
+/* ───────── 스크롤 도달 측정 ───────── */
 var seen = {};
 function mark(name){ if (seen[name]) return; seen[name] = 1; try { fbq('trackCustom', name); } catch(err) {} }
 if ('IntersectionObserver' in window) {
@@ -106,11 +338,11 @@ if ('IntersectionObserver' in window) {
     es.forEach(function(en){
       if (!en.isIntersecting) return;
       if (en.target.classList.contains('perks')) mark('ViewPerks');
-      if (en.target.classList.contains('pricing')) mark('ViewPricing');
+      if (en.target.classList.contains('price')) mark('ViewPricing');
     });
-  }, {threshold: 0.5});
+  }, {threshold:.5});
   var p1 = document.querySelector('.perks'); if (p1) io.observe(p1);
-  var p2 = document.querySelector('.pricing'); if (p2) io.observe(p2);
+  var p2 = document.querySelector('.price'); if (p2) io.observe(p2);
 }
 </script>
 </body>
