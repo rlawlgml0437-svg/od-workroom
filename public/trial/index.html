@@ -44,33 +44,39 @@ body{
 .page{max-width:480px;margin:0 auto;background:var(--bg);overflow:hidden}
 .pad{padding-left:22px;padding-right:22px}
 
-/* ───────── 히어로: 정사각 사진 + 아래 문구 (막·그라데이션 없음) ───────── */
-.topbar{padding:20px 22px 16px;text-align:center}
-.topbar img{height:16px;width:auto;margin:0 auto}
-.shot img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
-.copy{padding:26px 22px 0}
+/* ───────── 히어로: 정사각 사진 위에 메시지 ───────── */
+.hero{position:relative;color:#fff}
+.hero>img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+.hero::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(177deg,rgba(16,26,44,.34) 0%,rgba(16,26,44,.02) 24%,rgba(16,26,44,.34) 56%,rgba(16,26,44,.82) 100%);
+}
+.hero .inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;padding:22px 22px 24px}
+.hero .logo{height:16px;width:auto;filter:brightness(0) invert(1);opacity:.95}
+.hero .copy{margin-top:auto}
 .eyebrow{
-  display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.11em;
-  text-transform:uppercase;color:var(--accent-ink);margin-bottom:11px;
+  display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:#CFE4FF;margin-bottom:10px;
 }
 h1{
-  font-size:clamp(28px,8.2vw,34px);line-height:1.28;letter-spacing:-.03em;
-  font-weight:700;word-break:keep-all;color:var(--ink);
+  font-size:clamp(27px,7.8vw,33px);line-height:1.26;letter-spacing:-.03em;
+  font-weight:700;word-break:keep-all;text-shadow:0 2px 18px rgba(0,0,0,.32);
 }
-h1 .hl{color:var(--accent-ink)}
-.copy p{
-  margin-top:14px;font-size:15px;line-height:1.68;color:var(--soft);word-break:keep-all;
+h1 .hl{color:#AFD6FF}
+.hero p{
+  margin-top:11px;font-size:14px;line-height:1.6;color:rgba(255,255,255,.92);
+  word-break:keep-all;text-shadow:0 1px 12px rgba(0,0,0,.38);
 }
 
 /* ───────── 예약 블록 ───────── */
-.book{margin-top:26px}
+.book{margin-top:22px}
 .book .inner{
   background:var(--surface);border-radius:20px;box-shadow:var(--shadow);
   padding:18px 18px 16px;border:1px solid var(--line);
 }
 .promo{
   display:flex;align-items:center;gap:10px;
-  background:var(--tint);border-radius:12px;padding:11px 13px;margin-bottom:13px;
+  padding:2px 2px 0;margin-bottom:14px;
 }
 .promo .pct{
   flex:0 0 auto;background:var(--deep);color:var(--onbtn);font-size:13px;font-weight:700;
@@ -150,14 +156,16 @@ footer{padding:16px 0 46px;font-size:11px;color:var(--muted);line-height:1.8}
 <div class="page">
 
   <!-- ───────── 히어로 ───────── -->
-  <div class="topbar"><img src="/logo.svg" alt="오디워크룸"></div>
-  <div class="shot">
+  <div class="hero">
     <img src="/trial/hero-main.jpg" alt="자유석에서 각자 일하는 멤버들" fetchpriority="high" decoding="async">
-  </div>
-  <div class="copy">
-    <span class="eyebrow">김포 운양역 1분</span>
-    <h1>혼자 일하지만,<br><span class="hl">혼자 있고 싶진 않다면</span></h1>
-    <p>프리랜서·1인 사업자가 모여 일하는 한강뷰 코워킹스페이스.<br>하루 써보고 정하세요.</p>
+    <div class="inner">
+      <img class="logo" src="/logo.svg" alt="오디워크룸">
+      <div class="copy">
+        <span class="eyebrow">김포 운양역 1분</span>
+        <h1>혼자 일하지만,<br><span class="hl">혼자 있고 싶진 않다면</span></h1>
+        <p>프리랜서·1인 사업자가 모여 일하는 한강뷰 코워킹스페이스.<br>하루 써보고 정하세요.</p>
+      </div>
+    </div>
   </div>
 
   <!-- ───────── 예약 ───────── -->
