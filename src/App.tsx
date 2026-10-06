@@ -992,6 +992,8 @@ const Hero = ({ onTrialApply }: { onTrialApply: () => void }) => (
     <div className="absolute inset-0 z-0">
       <video 
         src="/main%20video.mp4" 
+        poster="/og/lounge-hangang-16x9.jpg"
+        aria-label="한강이 보이는 오디워크룸 라운지"
         autoPlay 
         muted 
         playsInline
@@ -1752,6 +1754,7 @@ const Footer = ({ onViewChange }: { onViewChange: (view: any) => void }) => {
           사업자등록번호 {ODI_CONTENT.brand.business.registrationNumber}
         </p>
         <p>{ODI_CONTENT.brand.business.address}</p>
+        <p>대표전화 {ODI_CONTENT.brand.business.phone}</p>
       </div>
       <div className="pt-6 text-xs flex justify-between items-center text-white/30">
         <p>

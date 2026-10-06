@@ -1,0 +1,5 @@
+# 오디워크룸 — 전체 공개
+User-agent: *
+Allow: /
+
+Sitemap: https://www.odworkroom.com/sitemap.xml

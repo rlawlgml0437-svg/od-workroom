@@ -17,6 +17,8 @@ export const ODI_CONTENT = {
       ceo: "김지희",
       registrationNumber: "529-23-02357",
       address: "경기도 김포시 김포한강1로 230, 801호",
+      // 대표전화(대표 결정 2026-10-06). 업무폰 번호. 결제사 심사·검색 노출에 쓰인다.
+      phone: "010-4985-0437",
     },
     contact: {
       kakao: "https://pf.kakao.com/_xkwkgn",
