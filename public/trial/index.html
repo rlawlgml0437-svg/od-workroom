@@ -49,6 +49,29 @@ ul.perks li { background: #fff; border: 1px solid #ececf2; border-radius: 10px; 
 .cta { display: block; width: 100%; background: #03c75a; color: #fff; text-decoration: none;
        font-size: 17px; font-weight: 700; border-radius: 12px; padding: 16px 0; margin-bottom: 12px; }
 .note { font-size: 12px; color: #999; line-height: 1.5; }
+.cta.naver { background: #fff; color: #03a94f; border: 1.5px solid #03c75a; font-size: 15px; padding: 13px 0; }
+.cta.form { background: var(--accent); }
+button.cta { border: 0; font-family: inherit; cursor: pointer; }
+button.cta:disabled { opacity: .55; cursor: default; }
+.sheet-bg { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: flex; align-items: flex-end; justify-content: center; z-index: 50; }
+[hidden] { display: none !important; }
+.sheet { position: relative; width: 100%; max-width: 420px; max-height: 92vh; overflow-y: auto; background: #fff; border-radius: 18px 18px 0 0;
+         padding: 26px 22px calc(20px + env(safe-area-inset-bottom)); text-align: left; }
+.sheet h2 { font-size: 20px; margin-bottom: 4px; }
+.sheet .hint { font-size: 13px; color: #888; margin-bottom: 18px; }
+.sheet .x { position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border: 0; background: none; font-size: 24px; color: #999; cursor: pointer; }
+.sheet label, .sheet .lbl { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 6px; }
+.sheet .field { margin-bottom: 14px; }
+.sheet input { display: block; width: 100%; min-height: 48px; padding: 0 12px; font-size: 16px; font-family: inherit; color: var(--ink);
+               border: 1px solid #e3e3ea; border-radius: 10px; background: #fff; -webkit-appearance: none; appearance: none; }
+.sheet input:focus { outline: none; border-color: var(--accent); }
+.sheet .row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; }
+.sheet .tip { font-size: 12px; color: #888; margin-top: 6px; line-height: 1.5; }
+.sheet .err { font-size: 13px; color: #d93a3a; margin-bottom: 10px; line-height: 1.5; }
+.sheet .privacy { font-size: 11px; color: #aaa; text-align: center; }
+.sheet .done { text-align: center; padding: 18px 0 4px; }
+.sheet .done-title { font-size: 18px; font-weight: 700; line-height: 1.5; margin-bottom: 18px; word-break: keep-all; }
+.sheet .done-sub { font-size: 13px; color: #888; margin-bottom: 10px; }
 .bizinfo { margin-top: 26px; padding-top: 16px; border-top: 1px solid #ececf2;
            font-size: 11px; color: #aaa; line-height: 1.7; text-align: left; }
 .loc { font-size: 13px; color: #777; margin-bottom: 20px; }
@@ -60,7 +83,8 @@ ul.perks li { background: #fff; border: 1px solid #ececf2; border-radius: 10px; 
   <h1>운양역 도보 1분,<br>한강뷰 24시 워크라운지</h1>
   <div class="heroes"><img src="/trial/hero1.jpg" alt="자유석"><img src="/trial/hero2.jpg" alt="한강뷰 라운지"><img src="/trial/hero3.jpg" alt="전용석"><img src="/trial/hero4.jpg" alt="커피 바"></div>
   <p class="sub">자유석 1일 체험으로 먼저 경험해보세요.<br>투어 후 당일 22시까지 자유롭게 이용하실 수 있어요.</p>
-  <a class="cta" href="#" data-book>자유석 무료 체험 예약</a>
+  <a class="cta form" href="#" data-form>자유석 무료 체험 신청</a>
+  <a class="cta naver" href="#" data-book>네이버로 바로 예약하기</a>
   <ul class="perks">
     <li>24시 워크라운지</li><li>한강뷰 라운지</li>
     <li>커피·간식 무료</li><li>프리랜서 네트워킹</li>
@@ -82,6 +106,31 @@ ul.perks li { background: #fff; border: 1px solid #ececf2; border-radius: 10px; 
     대표자 : 김지희<br>
     사업자등록번호 : 529-23-02357<br>
     사업장 주소 : 경기도 김포시 김포한강1로 230, 801호
+  </div>
+</div>
+<div class="sheet-bg" id="sheetBg" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <button class="x" type="button" data-close aria-label="닫기">×</button>
+    <form id="trialForm" novalidate>
+      <h2 id="sheetTitle">1일 무료 체험 신청</h2>
+      <p class="hint">남겨주시면 문자로 일정 확인 드려요.</p>
+      <div class="field"><label for="fName">이름</label><input id="fName" name="name" autocomplete="name" maxlength="30"></div>
+      <div class="field"><label for="fPhone">전화번호</label><input id="fPhone" name="contact" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000" maxlength="13"></div>
+      <div class="field">
+        <span class="lbl">원하는 방문 일정</span>
+        <div class="row"><input id="fDay" name="day" type="date" aria-label="방문 날짜"><input id="fTime" name="time" type="time" step="1800" aria-label="방문 시간"></div>
+        <p class="tip">체험 시작은 평일 10시~19시 사이를 추천드려요.<br>그 외 시간은 문자로 조율해 드릴게요.</p>
+      </div>
+      <p class="err" id="formErr" hidden></p>
+      <button class="cta form" type="submit" id="formBtn">신청하기</button>
+      <a class="cta naver" href="#" data-book id="errNaver" hidden>네이버로 바로 예약하기</a>
+      <p class="privacy">입력하신 정보는 체험 일정 안내에만 사용해요.</p>
+    </form>
+    <div class="done" id="formDone" hidden>
+      <p class="done-title">신청 완료!<br>곧 문자로 일정 확인 드릴게요 :)</p>
+      <p class="done-sub">지금 바로 확정하고 싶으시면</p>
+      <a class="cta naver" href="#" data-book>네이버로 바로 예약하기</a>
+    </div>
   </div>
 </div>
 <script>
@@ -118,6 +167,79 @@ if ('IntersectionObserver' in window) {
   var p1 = document.querySelector('.perks'); if (p1) io.observe(p1);
   var p2 = document.querySelector('.pricing'); if (p2) io.observe(p2);
 }
+
+// 2026-10-20 홈페이지 체험 신청 양식 (방문 최대화 광고용). 저장 형식은 lead-sync/website_form_sync.rb 와
+// firestore.rules(isValidTrialRegistration, 필드 10개 고정) 에 맞춘다. 필드를 바꾸면 수집이 끊긴다.
+var FS = { project: 'gen-lang-client-0752855834', db: 'ai-studio-568bd3bc-b6c7-49ae-95cb-da5c606630a4', key: 'AIzaSyB8cTwTVLcmpAWr-P9tzzx2oNz79dqv3Y4' };
+var sheetBg = document.getElementById('sheetBg'), form = document.getElementById('trialForm');
+var errEl = document.getElementById('formErr'), btn = document.getElementById('formBtn');
+function kstToday(){ return new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10); }
+function openSheet(){
+  document.getElementById('fDay').min = kstToday();
+  sheetBg.hidden = false; document.body.style.overflow = 'hidden';
+  mark('TrialFormOpen');
+}
+function closeSheet(){ sheetBg.hidden = true; document.body.style.overflow = ''; }
+document.querySelectorAll('[data-form]').forEach(function(el){
+  el.addEventListener('click', function(e){ e.preventDefault(); openSheet(); });
+});
+document.querySelector('[data-close]').addEventListener('click', closeSheet);
+sheetBg.addEventListener('click', function(e){ if (e.target === sheetBg) closeSheet(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !sheetBg.hidden) closeSheet(); });
+var phoneEl = document.getElementById('fPhone');
+phoneEl.addEventListener('input', function(){
+  var d = phoneEl.value.replace(/\D/g, '').slice(0, 11);
+  phoneEl.value = d.length < 4 ? d : d.length < 8 ? d.slice(0, 3) + '-' + d.slice(3) : d.slice(0, 3) + '-' + d.slice(3, d.length - 4) + '-' + d.slice(-4);
+});
+function showErr(msg){ errEl.textContent = msg; errEl.hidden = false; }
+function docId(){
+  var c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789', a = new Uint8Array(20), out = '';
+  crypto.getRandomValues(a); for (var i = 0; i < a.length; i++) out += c[a[i] % c.length]; return out;
+}
+function referral(){
+  var q = new URLSearchParams(location.search), tags = [];
+  ['utm_source', 'utm_campaign', 'utm_content'].forEach(function(k){ if (q.get(k)) tags.push(k.replace('utm_', '') + '=' + q.get(k)); });
+  return ('광고 랜딩(/trial)' + (tags.length ? ' ' + tags.join(' ') : '')).slice(0, 200);
+}
+var sending = false;
+form.addEventListener('submit', function(e){
+  e.preventDefault();
+  if (sending) return;
+  errEl.hidden = true;
+  var name = document.getElementById('fName').value.trim();
+  var digits = phoneEl.value.replace(/\D/g, '');
+  var day = document.getElementById('fDay').value, time = document.getElementById('fTime').value;
+  if (!name) return showErr('이름을 입력해주세요.');
+  if (!/^01[016789]\d{7,8}$/.test(digits)) return showErr('전화번호를 다시 확인해주세요.');
+  if (!day || !time) return showErr('원하는 방문 날짜와 시간을 골라주세요.');
+  if (day < kstToday()) return showErr('오늘 이후 날짜로 골라주세요.');
+  var contact = digits.slice(0, 3) + '-' + digits.slice(3, digits.length - 4) + '-' + digits.slice(-4);
+  var trialDate = day + 'T' + time.slice(0, 5); // 오프셋 없는 KST (sync 가 KST 로 해석)
+  var ref = referral();
+  var reason = ['성함: ' + name, '연락처: ' + contact, '체험 희망 일시: ' + day + ' ' + time.slice(0, 5), '하시는 일: ', '유입 경로: ' + ref, '궁금하신 점: 없음'].join('\n');
+  var base = 'projects/' + FS.project + '/databases/' + FS.db + '/documents';
+  var sv = function(v){ return { stringValue: v }; };
+  var body = { writes: [{
+    update: { name: base + '/registrations/' + docId(), fields: {
+      program: sv('1일 무료체험'), name: sv(name), contact: sv(contact), reason: sv(reason),
+      date: sv(new Date().toLocaleDateString('ko-KR')), trialDate: sv(trialDate),
+      job: sv(''), referral: sv(ref), questions: sv('') } },
+    updateTransforms: [{ fieldPath: 'createdAt', setToServerValue: 'REQUEST_TIME' }],
+    currentDocument: { exists: false } }] };
+  sending = true; btn.disabled = true; btn.textContent = '보내는 중…';
+  fetch('https://firestore.googleapis.com/v1/' + base + ':commit?key=' + FS.key, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+  }).then(function(r){
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    try { fbq('track', 'Lead', { content_name: 'trial_form' }); } catch(err) {}
+    try { window.karrotPixel.track('Lead'); } catch(err) {}
+    form.hidden = true; document.getElementById('formDone').hidden = false;
+  }).catch(function(){
+    try { fbq('trackCustom', 'TrialFormError'); } catch(err) {}
+    showErr('신청이 저장되지 않았어요. 잠시 후 다시 시도하시거나 네이버로 예약해주세요.'); document.getElementById('errNaver').hidden = false;
+    sending = false; btn.disabled = false; btn.textContent = '신청하기';
+  });
+});
 </script>
 </body>
 </html>
