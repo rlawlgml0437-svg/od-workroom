@@ -173,6 +173,10 @@ h2+.sub{margin-top:8px;font-size:14px;color:var(--soft);word-break:keep-all}
 .field input:focus,.field select:focus{outline:none;border-color:var(--point);background-color:var(--surface)}
 .field .row{display:grid;grid-template-columns:1.3fr 1fr;gap:8px}
 .field .tip{font-size:12.3px;color:var(--accent-ink);margin-top:7px;line-height:1.5;word-break:keep-all}
+.agree{display:flex;gap:10px;align-items:flex-start;margin:4px 0 14px;cursor:pointer}
+.agree input{flex:0 0 auto;width:20px;height:20px;margin-top:1px;accent-color:#2F6FB5}
+.agree span{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.45;word-break:keep-all}
+.agree small{display:block;font-size:11.5px;font-weight:400;color:var(--muted);margin-top:3px}
 .ferr{font-size:13px;color:#D23F3F;margin:-2px 0 10px;line-height:1.5}
 button.cta{border:0;font-family:inherit;cursor:pointer}
 button.cta:disabled{opacity:.55;cursor:default}
@@ -215,8 +219,9 @@ footer{padding:16px 0 46px;font-size:11px;color:var(--muted);line-height:1.8}
             <input id="fDay" name="day" type="date" aria-label="방문 날짜">
             <select id="fTime" name="time" required aria-label="방문 시간"><option value="" disabled selected>시간 선택</option></select>
           </div>
-          <p class="tip">방문 일정은 평일 투어 가능 시간(10:00~19:00)에만 잡을 수 있어요.</p>
+          <p class="tip">방문 일정은 평일 투어 가능 시간(10:00~19:00)에만 잡을 수 있어요.<br>공휴일은 문자로 일정 조율해 드려요.</p>
         </div>
+        <label class="agree"><input type="checkbox" id="fAgree"><span>개인정보 수집·이용에 동의합니다<small>수집 항목: 이름·전화번호·방문 일정 / 목적: 체험 일정 안내 / 상담 완료 후 파기</small></span></label>
         <p class="ferr" id="formErr" hidden></p>
         <button class="cta" type="submit" id="formBtn">무료 체험 신청하기</button>
         <p class="privacy">입력하신 정보는 체험 일정 안내에만 사용해요.</p>
@@ -484,10 +489,11 @@ form.addEventListener('submit', function(e){
   var hh = +time.slice(0, 2);
   if (hh < 10 || hh >= 19) return showErr('투어 가능 시간(10:00~19:00) 안에서 골라주세요.');
   if (day + 'T' + time <= kstNow().toISOString().slice(0, 16)) return showErr('이미 지난 시간이에요. 다른 일정을 골라주세요.');
+  if (!document.getElementById('fAgree').checked) return showErr('개인정보 수집·이용에 동의해주세요.');
   var contact = digits.slice(0, 3) + '-' + digits.slice(3, digits.length - 4) + '-' + digits.slice(-4);
   var trialDate = day + 'T' + time; // 오프셋 없는 KST (sync 가 KST 로 해석)
   var ref = referral();
-  var reason = ['성함: ' + name, '연락처: ' + contact, '체험 희망 일시: ' + day + ' ' + time, '하시는 일: ', '유입 경로: ' + ref, '궁금하신 점: 없음'].join('\n');
+  var reason = ['성함: ' + name, '연락처: ' + contact, '체험 희망 일시: ' + day + ' ' + time, '하시는 일: ', '유입 경로: ' + ref, '궁금하신 점: 없음', '개인정보 수집·이용 동의: 예 (' + new Date().toISOString() + ')'].join('\n');
   var base = 'projects/' + FS.project + '/databases/' + FS.db + '/documents';
   var sv = function(v){ return { stringValue: v }; };
   var body = { writes: [{
