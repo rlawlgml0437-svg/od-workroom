@@ -85,6 +85,7 @@ h1, .sheet h2, .sheet .done-title { font-family: "GangwonEduPower", -apple-syste
            font-size: 11px; color: #aaa; line-height: 1.7; text-align: left; }
 .loc { font-size: 13px; color: #777; margin-bottom: 20px; }
 </style>
+<script defer src="/t.js"></script>
 </head>
 <body>
 <div class="card">
@@ -149,6 +150,7 @@ document.querySelectorAll('[data-book]').forEach(function(el){
   el.addEventListener('click', function(e){
     e.preventDefault();
     try { fbq('track', 'Schedule', {content_name: 'naver_booking'}); } catch(err) {}
+    ot('naver_click', el.getAttribute('data-pos') || 'main');
     try { window.karrotPixel.track('Lead'); } catch(err) {}
     setTimeout(openNaver, 250);
   });
@@ -165,7 +167,10 @@ function openNaver(){
   window.location.href = deep;
 }
 var seen = {};
-function mark(name){ if (seen[name]) return; seen[name] = 1; try { fbq('trackCustom', name); } catch(err) {} }
+function mark(name){ if (seen[name]) return; seen[name] = 1; try { fbq('trackCustom', name); } catch(err) {}
+  ot({ViewPerks: 'perks_view', ViewPricing: 'pricing_view', TrialFormOpen: 'form_open'}[name]); }
+// 2026-10-23 자체 방문 기록(/t.js → 운영웹 '웹 방문'). 이름·전화 등 입력값은 보내지 않는다.
+function ot(n, l){ if (!n) return; try { if (window.odiTrack) window.odiTrack(n, l); } catch(err) {} }
 if ('IntersectionObserver' in window) {
   var io = new IntersectionObserver(function(es){
     es.forEach(function(en){
@@ -216,6 +221,7 @@ function referral(){
   return ('광고 랜딩(/trial)' + (tags.length ? ' ' + tags.join(' ') : '')).slice(0, 200);
 }
 var sending = false;
+form.addEventListener('focusin', function(){ if (!form.__started) { form.__started = 1; ot('form_start'); } });
 form.addEventListener('submit', function(e){
   e.preventDefault();
   if (sending) return;
@@ -236,8 +242,9 @@ form.addEventListener('submit', function(e){
   var reason = ['성함: ' + name, '연락처: ' + contact, '체험 희망 일시: ' + day + ' ' + time.slice(0, 5), '하시는 일: ', '유입 경로: ' + ref, '궁금하신 점: 없음', '개인정보 수집·이용 동의: 예 (' + new Date().toISOString() + ')'].join('\n');
   var base = 'projects/' + FS.project + '/databases/' + FS.db + '/documents';
   var sv = function(v){ return { stringValue: v }; };
+  var newId = docId();
   var body = { writes: [{
-    update: { name: base + '/registrations/' + docId(), fields: {
+    update: { name: base + '/registrations/' + newId, fields: {
       program: sv('1일 무료체험'), name: sv(name), contact: sv(contact), reason: sv(reason),
       date: sv(new Date().toLocaleDateString('ko-KR')), trialDate: sv(trialDate),
       job: sv(''), referral: sv(ref), questions: sv('') } },
@@ -249,10 +256,12 @@ form.addEventListener('submit', function(e){
   }).then(function(r){
     if (!r.ok) throw new Error('HTTP ' + r.status);
     try { fbq('track', 'Lead', { content_name: 'trial_form' }); } catch(err) {}
+    ot('lead', newId); // 문서 ID → 운영DB 예약 external_id 'website:ID' 와 연결
     try { window.karrotPixel.track('Lead'); } catch(err) {}
     form.hidden = true; document.getElementById('formDone').hidden = false;
   }).catch(function(){
     try { fbq('trackCustom', 'TrialFormError'); } catch(err) {}
+    ot('form_error');
     showErr('신청이 저장되지 않았어요. 잠시 후 다시 시도하시거나 네이버로 예약해주세요.'); document.getElementById('errNaver').hidden = false;
     sending = false; btn.disabled = false; btn.textContent = '신청하기';
   });
