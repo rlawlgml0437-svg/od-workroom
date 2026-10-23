@@ -1755,6 +1755,8 @@ const Footer = ({ onViewChange }: { onViewChange: (view: any) => void }) => {
         </p>
         <p>{ODI_CONTENT.brand.business.address}</p>
         <p>대표전화 {ODI_CONTENT.brand.business.phone}</p>
+        {/* 2026-10-23 자체 방문 통계(/t.js) 안내 — 대표 승인 */}
+        <p className="pt-2 text-white/30">이 사이트는 서비스 개선을 위해 쿠키 없이 익명 방문 통계를 수집합니다(원본 IP 미저장).</p>
       </div>
       <div className="pt-6 text-xs flex justify-between items-center text-white/30">
         <p>
