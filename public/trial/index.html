@@ -9,7 +9,6 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <meta name="robots" content="max-image-preview:large">
-<link rel="preload" as="image" href="/trial/hero-v4.jpg">
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -26,23 +25,17 @@ try { window.karrotPixel.init('1783049107774627000'); window.karrotPixel.track('
 </script>
 <script defer src="/t.js"></script>
 <style>
-/* 2026-10-26 v4 (대표 지시): "선택지와 생각할 시간을 줄이자" — 사진 1장 + 버튼 2개만.
+/* 2026-10-26 v4 (대표 지시): "선택지와 생각할 시간을 줄이자" — 로고 + 버튼 2개만.
    v3(팝업 신청서)은 커밋 3fa0692 에 있다. 이벤트 이름은 v3 와 같게 둔다(7일 비교용). */
-@font-face{font-family:"GangwonEduPower";src:url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduPowerExtraBoldA.woff") format("woff");font-weight:normal;font-display:swap}
 :root { --accent: #7B87F5; --press: #6a76ea; --ink: #1c1c1e; --soft: #6b6b73; --line: #e6e6ee; }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { background: #fafafa; }
 body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; color: var(--ink); }
 .screen { max-width: 440px; margin: 0 auto; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column;
           padding: 20px 20px calc(18px + env(safe-area-inset-bottom)); }
-.logo { height: 15px; width: auto; display: block; }
-/* 사진이 남는 높이를 채운다 — 키 큰 폰에서도 버튼은 아래(엄지 위치), 작은 폰(SE)에서도 한 화면 */
-.photo { margin-top: 16px; flex: 1 1 0; min-height: 210px; max-height: 560px; width: 100%; object-fit: cover; object-position: 50% 40%; border-radius: 16px; display: block; background: #eef0f6; }
-.copy { margin-top: 20px; }
-h1 { font-family: "GangwonEduPower", -apple-system, "Apple SD Gothic Neo", sans-serif; font-weight: normal;
-     font-size: clamp(23px, 6.6vw, 27px); line-height: 1.35; letter-spacing: -.01em; word-break: keep-all; }
-.sub { margin-top: 8px; font-size: 15px; color: var(--soft); }
-.actions { padding-top: 22px; }
+.logo { height: 15px; width: auto; display: block; margin: 4px auto 0; }
+/* 10/26 수정(대표): 사진·문구도 빼고 두 버튼만 — 화면 가운데~아래, 엄지 닿는 위치 */
+.actions { margin-top: auto; margin-bottom: 14vh; margin-bottom: 14svh; }
 .btn { display: block; width: 100%; text-align: center; text-decoration: none; border-radius: 14px;
        font-size: 17px; font-weight: 700; padding: 18px 0; }
 .btn.main { background: var(--accent); color: #fff; }
@@ -62,11 +55,6 @@ h1 { font-family: "GangwonEduPower", -apple-system, "Apple SD Gothic Neo", sans-
 <body>
 <main class="screen">
   <img class="logo" src="/logo.svg" alt="오디워크룸">
-  <img class="photo" src="/trial/hero-v4.jpg" alt="창밖으로 한강이 보이는 오디워크룸 라운지" width="900" height="1200" fetchpriority="high">
-  <div class="copy">
-    <h1>운양역 1분 · 24시간 ·<br>한강뷰 워크라운지</h1>
-    <p class="sub">자유석 1일 무료 체험</p>
-  </div>
   <div class="actions">
     <a class="btn main" href="#" data-book>자유석 무료 체험 예약</a>
     <a class="btn home" href="https://www.odworkroom.com/" data-home>오디워크룸 보러가기</a>
