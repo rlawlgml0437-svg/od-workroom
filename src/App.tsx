@@ -2612,6 +2612,7 @@ export default function App() {
     if (typeof window.karrotPixel?.track === 'function') {
       window.karrotPixel.track('Lead', { content_name: '1일 무료체험', content_category: '체험 예약(네이버)' });
     }
+    try { (window as any).odiTrack?.('naver_click', 'home'); } catch {}
     openNaverBooking(ODI_CONTENT.brand.contact.trial);
   };
 
