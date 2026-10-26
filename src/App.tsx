@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ODI_CONTENT } from './constants/content';
+import { INSIGHT_POSTS, InsightPost } from './constants/insight';
 import { db, auth, signInWithPassword } from './lib/firebase';
 import { 
   collection, 
@@ -507,11 +508,126 @@ const NewsView = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
-const RegistrationModal = ({ 
-  program, 
-  isOpen, 
-  onClose, 
-}: { 
+const InsightView = ({ onBack, onTrialApply }: { onBack: () => void; onTrialApply: () => void }) => {
+  const [selectedPost, setSelectedPost] = useState<InsightPost | null>(null);
+
+  return (
+    <motion.div
+      key="insight"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="pt-32 pb-24"
+    >
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="text-center mb-16">
+          <p className="text-brand-point font-bold tracking-widest text-sm mb-4 uppercase">OD INSIGHT</p>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+            프리랜서와 1인사업자를 위한
+            <br />
+            오디인사이트
+          </h1>
+          <p className="text-gray-500 font-light mt-6 leading-relaxed">
+            세금, 견적, 외주, 일하는 루틴 — 혼자 일하며 마주치는 질문들을
+            <br className="hidden md:block" />
+            매주 인스타그램 카드뉴스로 정리합니다. 이곳에서 글로 다시 읽어보세요.
+          </p>
+        </div>
+
+        {selectedPost ? (
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-white rounded-[40px] border border-gray-100 shadow-sm overflow-hidden mb-24"
+          >
+            <div className="p-10 md:p-14">
+              <button
+                onClick={() => setSelectedPost(null)}
+                className="flex items-center space-x-2 text-gray-400 hover:text-brand-point mb-8 transition-colors text-sm font-bold uppercase tracking-widest"
+              >
+                <ArrowRight className="rotate-180" size={14} />
+                <span>Back to List</span>
+              </button>
+              <span className="text-[11px] text-brand-point font-bold uppercase tracking-widest">{selectedPost.vol}</span>
+              <h2 className="text-3xl font-bold mt-2 mb-3">{selectedPost.title}</h2>
+              <p className="text-gray-400 font-mono text-sm mb-10 pb-10 border-b border-gray-50">{selectedPost.date}</p>
+
+              <div className="space-y-10">
+                {selectedPost.sections.map((s, i) => (
+                  <div key={i}>
+                    <h3 className="text-xl font-bold mb-3 text-gray-900">{s.head}</h3>
+                    <p className="text-gray-600 leading-relaxed font-light">{s.body}</p>
+                  </div>
+                ))}
+              </div>
+
+              {selectedPost.outro && (
+                <div className="mt-12 bg-brand-blue-light/50 rounded-3xl p-8 text-gray-700 leading-relaxed font-light">
+                  {selectedPost.outro}
+                </div>
+              )}
+
+              <div className="mt-12 flex flex-col sm:flex-row gap-4">
+                <a
+                  href={selectedPost.instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center space-x-2 border border-gray-200 hover:border-brand-point hover:text-brand-point rounded-full px-8 py-4 text-sm font-bold transition-colors"
+                >
+                  <Instagram size={16} />
+                  <span>인스타그램에서 카드뉴스로 보기</span>
+                </a>
+                <button
+                  onClick={onTrialApply}
+                  className="flex items-center justify-center space-x-2 bg-brand-point text-white rounded-full px-8 py-4 text-sm font-bold hover:opacity-90 transition-opacity"
+                >
+                  <span>자유석 1일 무료 체험하기</span>
+                  <ArrowRight size={14} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          <div className="grid gap-6 mb-24">
+            {INSIGHT_POSTS.map((post) => (
+              <motion.div
+                key={post.slug}
+                onClick={() => { setSelectedPost(post); window.scrollTo(0, 0); }}
+                whileHover={{ y: -5 }}
+                className="bg-white rounded-[40px] border border-gray-100 shadow-sm p-8 md:p-10 cursor-pointer transition-all hover:shadow-xl hover:border-brand-point/20 group"
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[10px] text-brand-point font-bold uppercase tracking-widest">{post.vol}</span>
+                  <span className="text-gray-400 font-mono text-xs">{post.date}</span>
+                </div>
+                <h3 className="text-xl md:text-2xl font-bold mb-3 group-hover:text-brand-point transition-colors">{post.title}</h3>
+                <p className="text-gray-500 text-sm font-light mb-5 leading-relaxed">{post.summary}</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map((t) => (
+                      <span key={t} className="text-[11px] text-gray-400 bg-gray-50 rounded-full px-3 py-1">#{t}</span>
+                    ))}
+                  </div>
+                  <span className="text-brand-point font-bold text-sm flex items-center space-x-1 shrink-0">
+                    <span>읽어보기</span>
+                    <ArrowRight size={14} />
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+      <Footer onViewChange={(view) => { if (view === 'home') onBack(); }} />
+    </motion.div>
+  );
+};
+
+const RegistrationModal = ({
+  program,
+  isOpen,
+  onClose,
+}: {
   program: string; 
   isOpen: boolean; 
   onClose: () => void; 
@@ -908,7 +1024,7 @@ const SectionTitle = ({ title, subtitle }: { title: string; subtitle?: string })
 
 // --- Page Sections ---
 
-const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news') => void; currentView: string }) => {
+const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news' | 'insight') => void; currentView: string }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -918,7 +1034,7 @@ const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | '
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNav = (view: 'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news') => {
+  const handleNav = (view: 'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news' | 'insight') => {
     onViewChange(view);
     setIsMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -953,6 +1069,7 @@ const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | '
           <button onClick={() => handleNav('home')} className={`hover:text-brand-point transition-colors ${currentView === 'home' ? 'text-brand-point' : ''}`}>홈</button>
           <button onClick={() => handleNav('space-detail')} className={`hover:text-brand-point transition-colors ${currentView === 'space-detail' ? 'text-brand-point' : ''}`}>공간 소개</button>
           <button onClick={() => handleNav('pricing-detail')} className={`hover:text-brand-point transition-colors ${currentView === 'pricing-detail' ? 'text-brand-point' : ''}`}>이용권 안내</button>
+          <button onClick={() => handleNav('insight')} className={`hover:text-brand-point transition-colors ${currentView === 'insight' ? 'text-brand-point' : ''}`}>오디인사이트</button>
           <button onClick={() => handleNav('news')} className={`hover:text-brand-point transition-colors ${currentView === 'news' ? 'text-brand-point' : ''}`}>공지 및 소식</button>
         </div>
 
@@ -979,6 +1096,7 @@ const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | '
             <button className="text-left py-2 font-medium" onClick={() => handleNav('home')}>홈</button>
             <button className="text-left py-2 font-medium" onClick={() => handleNav('space-detail')}>공간 소개</button>
             <button className="text-left py-2 font-medium" onClick={() => handleNav('pricing-detail')}>이용권 안내</button>
+            <button className="text-left py-2 font-medium" onClick={() => handleNav('insight')}>오디인사이트</button>
             <button className="text-left py-2 font-medium" onClick={() => handleNav('news')}>공지 및 소식</button>
           </motion.div>
         )}
@@ -2473,7 +2591,7 @@ const PricingDetail = () => {
 // --- Main App Component ---
 
 export default function App() {
-  const [view, setView] = useState<'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news'>('home');
+  const [view, setView] = useState<'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news' | 'insight'>('home');
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
   const [isTrialApplicationOpen, setIsTrialApplicationOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState('');
@@ -2500,8 +2618,8 @@ export default function App() {
   useEffect(() => {
     const syncViewFromHash = () => {
       const hashView = window.location.hash.replace('#', '');
-      if (['home', 'admin', 'space-detail', 'pricing-detail', 'news'].includes(hashView)) {
-        setView(hashView as 'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news');
+      if (['home', 'admin', 'space-detail', 'pricing-detail', 'news', 'insight'].includes(hashView)) {
+        setView(hashView as 'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news' | 'insight');
       }
     };
 
@@ -2510,7 +2628,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', syncViewFromHash);
   }, []);
 
-  const handleViewChange = (newView: 'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news') => {
+  const handleViewChange = (newView: 'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news' | 'insight') => {
     setView(newView);
     const baseUrl = `${window.location.pathname}${window.location.search}`;
     window.history.pushState(null, '', newView === 'home' ? baseUrl : `${baseUrl}#${newView}`);
@@ -2574,6 +2692,10 @@ export default function App() {
           <NewsView onBack={() => handleViewChange('home')} />
         )}
 
+        {view === 'insight' && (
+          <InsightView onBack={() => handleViewChange('home')} onTrialApply={handleTrialClick} />
+        )}
+
         {view === 'space-detail' && (
           <motion.div 
             key="space-detail"
@@ -2619,27 +2741,45 @@ export default function App() {
                   subtitle="우리는 '단순한 옆자리 사람'을 넘어, 건강한 자극을 주는 동료가 됩니다."
                 />
                 <div className="grid md:grid-cols-2 gap-12">
-                   {ODI_CONTENT.community.programs?.map((p: any, i: number) => (
-                     <motion.div 
+                   {ODI_CONTENT.community.programs?.map((p: any, i: number) => {
+                     const clickable = p.action && p.action !== 'none';
+                     const handleClick = () => {
+                       if (p.action === 'apply') openRegistration(p.name);
+                       else if (p.action === 'insight') handleViewChange('insight');
+                     };
+                     return (
+                     <motion.div
                         key={i}
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: i * 0.2 }}
-                        onClick={() => openRegistration(p.name)}
-                        className="bg-brand-blue-light/50 p-10 rounded-[40px] flex flex-col items-center text-center cursor-pointer hover:bg-brand-blue-light hover:scale-[1.02] transition-all group"
+                        onClick={clickable ? handleClick : undefined}
+                        className={`bg-brand-blue-light/50 p-10 rounded-[40px] flex flex-col items-center text-center transition-all group ${clickable ? 'cursor-pointer hover:bg-brand-blue-light hover:scale-[1.02]' : ''}`}
                      >
                         <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
                            <LayoutDashboard className="text-brand-point" />
                         </div>
+                        {p.badge && (
+                          <span className="text-[11px] text-brand-point font-bold tracking-widest uppercase mb-2">{p.badge}</span>
+                        )}
                         <h4 className="text-2xl mb-4">{p.name}</h4>
                         <p className="text-gray-500 leading-relaxed font-light mb-6">{p.desc}</p>
-                        <span className="text-brand-point font-bold text-sm flex items-center space-x-2">
-                           <span>지금 신청하기</span>
-                           <ArrowRight size={14} />
-                        </span>
+                        {p.action === 'apply' && (
+                          <span className="text-brand-point font-bold text-sm flex items-center space-x-2">
+                             <span>참여 신청하기</span>
+                             <ArrowRight size={14} />
+                          </span>
+                        )}
+                        {p.action === 'insight' && (
+                          <span className="text-brand-point font-bold text-sm flex items-center space-x-2">
+                             <span>아카이브 읽어보기</span>
+                             <ArrowRight size={14} />
+                          </span>
+                        )}
                      </motion.div>
-                   ))}
+                     );
+                   })}
                 </div>
               </div>
             </section>
