@@ -70,7 +70,7 @@ export const ODI_CONTENT = {
       },
       {
         title: "정기 커피챗 — 열 명이 모인 날",
-        date: "2026.09",
+        date: "2026.07",
         photo: "/photos/web/moments-coffeechat-10.jpg",
         note: "일 얘기로 시작해서 동네 맛집 얘기로 끝났지만, 그게 커피챗이죠."
       }
