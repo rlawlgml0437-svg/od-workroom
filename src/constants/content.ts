@@ -57,16 +57,16 @@ export const ODI_CONTENT = {
     },
     moments: [
       {
-        title: "AI 커피챗 4회차 — 한 달 AI 뉴스 브리핑",
-        date: "2026.10.02",
-        photo: "/photos/web/community-005.webp",
-        note: "이번 달에 나온 AI 소식 중 '내 일에 바로 쓸 것'만 골라서 수다 떨었어요."
-      },
-      {
         title: "AI 스터디 #1 — 클로드로 릴스 편집해 보기",
         date: "2026.10.19",
         photo: "",
         note: "멤버가 직접 연 첫 스터디. 각자 노트북 들고 모여 릴스 한 편씩 만들었어요."
+      },
+      {
+        title: "AI 커피챗 4회차 — 한 달 AI 뉴스 브리핑",
+        date: "2026.10.02",
+        photo: "/photos/web/community-005.webp",
+        note: "이번 달에 나온 AI 소식 중 '내 일에 바로 쓸 것'만 골라서 수다 떨었어요."
       },
       {
         title: "정기 커피챗 — 열 명이 모인 날",
