@@ -2775,7 +2775,13 @@ const PricingDetail = () => {
 // --- Main App Component ---
 
 export default function App() {
-  const [view, setView] = useState<'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news' | 'insight'>('home');
+  // 해시 직접 진입(#insight 등) 시 초기 view를 해시로 결정 — 마운트 직후 전환은 AnimatePresence(mode="wait")가 멈추는 문제가 있어 첫 렌더부터 올바른 view로 시작한다.
+  const [view, setView] = useState<'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news' | 'insight'>(() => {
+    const h = typeof window !== 'undefined' ? window.location.hash.replace('#', '') : '';
+    return (['home', 'admin', 'space-detail', 'pricing-detail', 'news', 'insight'] as const).includes(h as any)
+      ? (h as 'home' | 'admin' | 'space-detail' | 'pricing-detail' | 'news' | 'insight')
+      : 'home';
+  });
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
   const [isTrialApplicationOpen, setIsTrialApplicationOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState('');
