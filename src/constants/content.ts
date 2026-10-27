@@ -41,7 +41,7 @@ export const ODI_CONTENT = {
     tagline: "Freelance, not Friendless",
     title: "혼자 일하지만,\n혼자는 아니에요",
     subtitle: "운양역 1분 · 24시간 · 프리랜서와 1인 사업자가 함께 일하는 커뮤니티 오피스",
-    image: "/photos/web/moments-coffeechat-10.jpg", // 대표 확인 필요: 히어로 사진 선택
+    image: "/photos/web/community-002.webp", // 대표 확정 10/27: 창가 긴 테이블 3명 뒷모습
     buttons: [
       { text: "자유석 1일 무료 체험 예약", link: "#trial-application" },
       { text: "커뮤니티 둘러보기", link: "#community-moments" }
@@ -59,7 +59,7 @@ export const ODI_CONTENT = {
       {
         title: "AI 커피챗 4회차 — 한 달 AI 뉴스 브리핑",
         date: "2026.10.02",
-        photo: "/photos/web/moments-ai-coffeechat-4.jpg",
+        photo: "/photos/web/community-005.webp",
         note: "이번 달에 나온 AI 소식 중 '내 일에 바로 쓸 것'만 골라서 수다 떨었어요."
       },
       {
