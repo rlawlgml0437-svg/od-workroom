@@ -26,7 +26,6 @@ import {
   getDoc,
   setDoc,
   deleteDoc,
-  increment,
   limit,
   where
 } from 'firebase/firestore';
@@ -2831,23 +2830,9 @@ export default function App() {
     setIsRegistrationOpen(true);
   };
 
-  useEffect(() => {
-    if (view === 'home' || view === 'space-detail' || view === 'pricing-detail') {
-      const trackVisit = async () => {
-        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-        const visitRef = doc(db, 'analytics', today);
-        try {
-          await setDoc(visitRef, { 
-            count: increment(1),
-            lastUpdated: serverTimestamp() 
-          }, { merge: true });
-        } catch (e) {
-          console.error("Visit tracking error:", e);
-        }
-      };
-      trackVisit();
-    }
-  }, [view]);
+  // 2026-10-27 옛 Firestore 방문 집계(analytics/{날짜} increment) 제거.
+  // 보안규칙이 로그인 사용자만 쓰기를 허용해 일반 방문자는 매번 "Missing or insufficient permissions"
+  // 콘솔 에러만 냈다(마지막 성공 기록 2026-06-17). 방문 통계는 /t.js → 운영웹 '웹 방문'이 대신한다.
 
   return (
     <div className="bg-brand-bg font-sans overflow-x-hidden">
