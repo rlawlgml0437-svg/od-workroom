@@ -370,8 +370,8 @@ const DEFAULT_NEWS = [
   },
   {
     id: 'trial',
-    title: '1일 무료체험 신청 안내',
-    content: '오디워크룸이 궁금하다면 홈페이지 신청폼을 통해 1일 무료체험을 신청해보세요. 공간 분위기와 좌석을 직접 확인하실 수 있습니다.',
+    title: '자유석 1일 무료 체험 안내',
+    content: '오디워크룸이 궁금하다면 홈페이지에서 자유석 1일 무료 체험을 예약해보세요. 공간 분위기와 좌석을 직접 확인하실 수 있습니다.',
     date: '이용 안내',
     imageUrl: '/IMG_1057.JPG',
     status: '게시중',
@@ -872,7 +872,7 @@ const TrialApplicationModal = ({
           <div className="flex justify-between gap-6 mb-8">
             <div>
               <p className="text-xs font-bold text-brand-point uppercase tracking-widest mb-2">Free Trial</p>
-              <h3 className="text-2xl md:text-3xl font-bold">1일 무료체험 신청</h3>
+              <h3 className="text-2xl md:text-3xl font-bold">자유석 1일 무료 체험 예약</h3>
             </div>
             <button
               type="button"
@@ -1105,51 +1105,64 @@ const Navbar = ({ onViewChange, currentView }: { onViewChange: (view: 'home' | '
   );
 };
 
-const Hero = ({ onTrialApply }: { onTrialApply: () => void }) => (
+// 2026-10-27 개편: 영상 인트로 제거(첫 화면 지연 해소), 사람이 있는 사진 + 커뮤니티 메시지 (대표 지시)
+const Hero = ({ onTrialApply }: { onTrialApply: () => void }) => {
+  const scrollToMoments = () => {
+    document.getElementById('community-moments')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  return (
   <section className="relative min-h-screen flex items-end justify-center overflow-hidden px-0 pb-[8vh] pt-24 md:pb-[9vh] md:pt-28 lg:pb-[10vh]">
     <div className="absolute inset-0 z-0">
-      <video 
-        src="/main%20video.mp4" 
-        poster="/og/lounge-hangang-16x9.jpg"
-        aria-label="한강이 보이는 오디워크룸 라운지"
-        autoPlay 
-        muted 
-        playsInline
+      <img
+        src={ODI_CONTENT.hero.image}
+        alt="오디워크룸 멤버들이 함께 모여 있는 모습"
         className="w-full h-full object-cover"
       />
     </div>
-    <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/0 via-black/10 to-black/42" />
+    <div className="absolute inset-0 z-[1] bg-gradient-to-b from-black/10 via-black/25 to-black/55" />
 
     <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center text-white">
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.25 }}
+        className="mb-4 text-sm font-bold uppercase tracking-[0.3em] text-white/80"
+      >
+        {ODI_CONTENT.hero.tagline}
+      </motion.p>
       <motion.h1
-        initial={{ opacity: 0, y: 18 }}
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.25 }}
-        className="mx-auto mb-6 text-4xl font-bold leading-tight tracking-tight text-white md:whitespace-nowrap md:text-5xl lg:text-[3.25rem]"
+        transition={{ duration: 0.3 }}
+        className="mx-auto mb-6 whitespace-pre-line text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl lg:text-[3.5rem]"
       >
         {ODI_CONTENT.hero.title}
       </motion.h1>
-      <motion.p 
-        initial={{ opacity: 0, y: 20 }}
+      <motion.p
+        initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35 }}
-        className="mx-auto mb-9 text-lg font-medium leading-relaxed text-white md:whitespace-nowrap md:text-2xl"
+        transition={{ duration: 0.3, delay: 0.05 }}
+        className="mx-auto mb-9 text-base font-medium leading-relaxed text-white md:text-xl"
       >
         {ODI_CONTENT.hero.subtitle}
       </motion.p>
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.45 }}
-        className="flex items-center justify-center"
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.1 }}
+        className="flex flex-col items-center justify-center gap-3 sm:flex-row"
       >
         <button type="button" onClick={onTrialApply} className="btn-primary border-white bg-white px-10 py-4 text-brand-point hover:bg-brand-point hover:text-white">
-          1일 무료체험 신청
+          자유석 1일 무료 체험 예약
+        </button>
+        <button type="button" onClick={scrollToMoments} className="rounded-full border border-white/60 px-10 py-4 font-bold text-white transition-colors hover:bg-white/15">
+          커뮤니티 둘러보기
         </button>
       </motion.div>
     </div>
   </section>
-);
+  );
+};
 
 type PhotoCarouselProps = {
   images: string[];
@@ -1475,7 +1488,7 @@ const SpaceDetail = ({ onTrialApply }: { onTrialApply: () => void }) => {
            />
            <div className="flex flex-col sm:flex-row justify-center gap-6">
               <button type="button" onClick={onTrialApply} className="btn-primary py-4 px-12">
-                1일 무료체험 신청하기
+                자유석 1일 무료 체험 예약
               </button>
               <a href={ODI_CONTENT.brand.contact.kakao} className="btn-secondary py-4 px-12">
                 이용권 상세 문의
@@ -1551,13 +1564,29 @@ const Audience = () => {
   return (
     <section className="py-24 bg-brand-bg">
       <div className="max-w-7xl mx-auto px-6">
-        <SectionTitle 
-          title="어떤 분들이 오시나요?" 
-          subtitle="혼자 일하지만 집이나 카페만으로는 아쉬웠던 분들이 많이 찾아옵니다."
+        <SectionTitle
+          title="여기서 일하는 사람들"
+          subtitle="혼자 일하지만 집이나 카페만으로는 아쉬웠던 분들이 모여 있어요."
         />
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <div className="mb-14 flex flex-wrap justify-center gap-3">
+          {ODI_CONTENT.members?.map((member, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.04 }}
+              className="px-4 py-2 rounded-full border border-gray-100 bg-white text-sm text-gray-600 shadow-sm hover:border-brand-point hover:text-brand-point transition-all cursor-default"
+            >
+              #{member}
+            </motion.span>
+          ))}
+        </div>
+
+        <div className="grid sm:grid-cols-3 gap-8">
           {ODI_CONTENT.targetAudience?.map((item, idx) => (
-            <motion.div 
+            <motion.div
               key={idx}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -1573,10 +1602,154 @@ const Audience = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* 멤버 한 줄 후기 — testimonials 데이터가 채워지면 자동 노출 */}
+        {ODI_CONTENT.testimonials.length > 0 && (
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {ODI_CONTENT.testimonials.map((t, i) => (
+              <motion.blockquote
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="rounded-[28px] bg-white p-8 ring-1 ring-gray-100"
+              >
+                <p className="mb-4 leading-relaxed text-gray-700">"{t.quote}"</p>
+                <footer className="text-sm font-bold text-brand-point">— {t.job} 멤버</footer>
+              </motion.blockquote>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
 };
+
+// '요즘 오디워크룸' — 다음 모임 + 지난 모임 기록 + 정기 프로그램 (2026-10-27 개편)
+const CommunityMoments = ({ onApply, onInsight }: { onApply: (name: string) => void; onInsight: () => void }) => {
+  const { nextEvent, moments } = ODI_CONTENT.communityMoments;
+  return (
+    <section id="community-moments" className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+        <SectionTitle
+          title="요즘 오디워크룸"
+          subtitle="설명보다 기록이 낫죠. 요즘 이런 일들이 있었어요."
+        />
+
+        {/* 다음 모임 배지 */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mx-auto mb-14 max-w-3xl rounded-[32px] border border-brand-point/20 bg-brand-blue-light/40 p-8 text-center md:p-10"
+        >
+          <span className="inline-block rounded-full bg-brand-point px-4 py-1.5 text-xs font-bold text-white">
+            {nextEvent.badge} · {nextEvent.date}
+          </span>
+          <h3 className="mt-4 text-2xl font-bold md:text-3xl">{nextEvent.name}</h3>
+          <p className="mt-3 leading-relaxed text-gray-600 font-light">{nextEvent.desc}</p>
+        </motion.div>
+
+        {/* 지난 모임 카드 */}
+        <div className="grid gap-6 md:grid-cols-3 mb-20">
+          {moments.map((m, i) => (
+            <motion.article
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className="flex flex-col overflow-hidden rounded-[28px] bg-brand-bg ring-1 ring-gray-100"
+            >
+              {m.photo ? (
+                <div className="h-52 overflow-hidden">
+                  <img src={m.photo} alt={m.title} loading="lazy" className="h-full w-full object-cover" />
+                </div>
+              ) : (
+                <div className="flex h-52 items-center justify-center bg-brand-blue-light/50 text-5xl">💻</div>
+              )}
+              <div className="flex-1 p-6">
+                <p className="mb-2 font-mono text-xs text-gray-400">{m.date}</p>
+                <h4 className="mb-2 font-bold leading-snug">{m.title}</h4>
+                <p className="text-sm font-light leading-relaxed text-gray-500">{m.note}</p>
+              </div>
+            </motion.article>
+          ))}
+        </div>
+
+        {/* 정기 프로그램 */}
+        <p className="mb-8 text-center text-xs font-bold uppercase tracking-widest text-gray-400">정기 프로그램</p>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {ODI_CONTENT.community.programs?.map((p: any, i: number) => {
+            const clickable = p.action && p.action !== 'none';
+            const handleClick = () => {
+              if (p.action === 'apply') onApply(p.name);
+              else if (p.action === 'insight') onInsight();
+            };
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                onClick={clickable ? handleClick : undefined}
+                className={`rounded-[28px] bg-brand-blue-light/40 p-7 text-center transition-all ${clickable ? 'cursor-pointer hover:bg-brand-blue-light hover:scale-[1.02]' : ''}`}
+              >
+                {p.badge && <span className="mb-2 block text-[11px] font-bold uppercase tracking-widest text-brand-point">{p.badge}</span>}
+                <h4 className="mb-2 text-lg font-bold">{p.name}</h4>
+                <p className="text-sm font-light leading-relaxed text-gray-500">{p.desc}</p>
+                {clickable && (
+                  <span className="mt-4 inline-flex items-center space-x-1 text-sm font-bold text-brand-point">
+                    <span>{p.action === 'apply' ? '참여 신청하기' : '아카이브 읽어보기'}</span>
+                    <ArrowRight size={13} />
+                  </span>
+                )}
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+// 홈 오디인사이트 티저 — 최근 2편 (2026-10-27 개편)
+const InsightTeaser = ({ onMore }: { onMore: () => void }) => (
+  <section className="py-24 bg-brand-bg">
+    <div className="max-w-7xl mx-auto px-6">
+      <SectionTitle
+        title="오디인사이트"
+        subtitle="세금, 견적, 외주 — 혼자 일하며 마주치는 질문들을 매주 정리해요."
+      />
+      <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+        {INSIGHT_POSTS.slice(0, 2).map((post) => (
+          <motion.div
+            key={post.slug}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            onClick={onMore}
+            className="cursor-pointer rounded-[28px] bg-white p-8 ring-1 ring-gray-100 transition-all hover:-translate-y-1 hover:shadow-xl group"
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-brand-point">{post.vol}</span>
+              <span className="font-mono text-xs text-gray-400">{post.date}</span>
+            </div>
+            <h3 className="mb-3 text-xl font-bold group-hover:text-brand-point transition-colors">{post.title}</h3>
+            <p className="text-sm font-light leading-relaxed text-gray-500 line-clamp-2">{post.summary}</p>
+          </motion.div>
+        ))}
+      </div>
+      <div className="mt-10 text-center">
+        <button onClick={onMore} className="inline-flex items-center space-x-2 font-bold text-brand-point hover:underline">
+          <span>전체 아카이브 보기</span>
+          <ArrowRight size={16} />
+        </button>
+      </div>
+    </div>
+  </section>
+);
 
 const Atmosphere = () => (
   <section id="atmosphere" className="py-24 bg-white overflow-hidden">
@@ -1606,23 +1779,6 @@ const Atmosphere = () => (
         </p>
       </div>
 
-      <div className="mt-20">
-        <p className="text-center text-xs uppercase tracking-widest text-gray-400 mb-8 font-bold">오디 사람들의 직업</p>
-        <div className="flex flex-wrap justify-center gap-3">
-          {ODI_CONTENT.members?.map((member, i) => (
-            <motion.span 
-              key={i}
-              initial={{ opacity: 0, x: -10 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              className="px-4 py-2 rounded-full border border-gray-100 bg-white text-sm text-gray-600 shadow-sm hover:border-brand-point hover:text-brand-point transition-all cursor-default"
-            >
-              #{member}
-            </motion.span>
-          ))}
-        </div>
-      </div>
     </div>
   </section>
 );
@@ -1713,6 +1869,34 @@ const Pricing = ({ onMoreDetail }: { onMoreDetail: () => void }) => (
           </motion.div>
         ))}
       </div>
+
+      <p className="mt-8 text-center text-sm text-gray-500 font-light">
+        AI 커피챗 등 커뮤니티 프로그램은 정기 회원(자유석·전용석)에게 열려 있어요.
+      </p>
+
+      {/* 12시간권 — 하루 체험 (2026-10-27 추가) */}
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="mx-auto mt-10 flex max-w-4xl flex-col items-center justify-between gap-4 rounded-[28px] bg-white p-7 ring-1 ring-gray-100 sm:flex-row sm:px-10"
+      >
+        <div className="text-center sm:text-left">
+          <p className="font-bold text-lg">
+            {ODI_CONTENT.dayPass.name} <span className="text-brand-point">{ODI_CONTENT.dayPass.price}</span>
+            <span className="ml-2 text-xs font-normal text-gray-400">{ODI_CONTENT.dayPass.note}</span>
+          </p>
+          <p className="mt-1 text-sm font-light text-gray-500">{ODI_CONTENT.dayPass.desc}</p>
+        </div>
+        <a
+          href={ODI_CONTENT.brand.contact.trial}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="shrink-0 rounded-full bg-brand-blue-light px-7 py-3 text-sm font-bold text-brand-point transition-colors hover:bg-brand-point hover:text-white"
+        >
+          네이버에서 예약하기
+        </a>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 24 }}
@@ -2729,61 +2913,12 @@ export default function App() {
             exit={{ opacity: 0 }}
           >
             <Hero onTrialApply={handleTrialClick} />
-            <Introduction />
+            <CommunityMoments onApply={openRegistration} onInsight={() => handleViewChange('insight')} />
             <Audience />
             <Atmosphere />
             <SpacePhotoGallery />
             <Pricing onMoreDetail={() => setView('pricing-detail')} />
-            {/* Community Section Integration */}
-            <section className="py-24 bg-white">
-              <div className="max-w-7xl mx-auto px-6">
-                <SectionTitle 
-                  title={ODI_CONTENT.community.title}
-                  subtitle="우리는 '단순한 옆자리 사람'을 넘어, 건강한 자극을 주는 동료가 됩니다."
-                />
-                <div className="grid md:grid-cols-2 gap-12">
-                   {ODI_CONTENT.community.programs?.map((p: any, i: number) => {
-                     const clickable = p.action && p.action !== 'none';
-                     const handleClick = () => {
-                       if (p.action === 'apply') openRegistration(p.name);
-                       else if (p.action === 'insight') handleViewChange('insight');
-                     };
-                     return (
-                     <motion.div
-                        key={i}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.2 }}
-                        onClick={clickable ? handleClick : undefined}
-                        className={`bg-brand-blue-light/50 p-10 rounded-[40px] flex flex-col items-center text-center transition-all group ${clickable ? 'cursor-pointer hover:bg-brand-blue-light hover:scale-[1.02]' : ''}`}
-                     >
-                        <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
-                           <LayoutDashboard className="text-brand-point" />
-                        </div>
-                        {p.badge && (
-                          <span className="text-[11px] text-brand-point font-bold tracking-widest uppercase mb-2">{p.badge}</span>
-                        )}
-                        <h4 className="text-2xl mb-4">{p.name}</h4>
-                        <p className="text-gray-500 leading-relaxed font-light mb-6">{p.desc}</p>
-                        {p.action === 'apply' && (
-                          <span className="text-brand-point font-bold text-sm flex items-center space-x-2">
-                             <span>참여 신청하기</span>
-                             <ArrowRight size={14} />
-                          </span>
-                        )}
-                        {p.action === 'insight' && (
-                          <span className="text-brand-point font-bold text-sm flex items-center space-x-2">
-                             <span>아카이브 읽어보기</span>
-                             <ArrowRight size={14} />
-                          </span>
-                        )}
-                     </motion.div>
-                     );
-                   })}
-                </div>
-              </div>
-            </section>
+            <InsightTeaser onMore={() => handleViewChange('insight')} />
             {/* Instagram Feed Section */}
             <section className="py-24 bg-gray-50 overflow-hidden">
               <div className="max-w-7xl mx-auto px-6">

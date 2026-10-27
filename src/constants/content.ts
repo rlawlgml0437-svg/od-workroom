@@ -37,12 +37,47 @@ export const ODI_CONTENT = {
     { id: 6, url: "/IMG_0504.JPG", link: "https://www.instagram.com/od.workroom" }
   ],
   hero: {
-    title: "운양역 1분, 24시간 한강뷰 작업공간",
-    subtitle: "카페 눈치 없이 오래 일하고 싶은 분들을 위한 김포 운양동 커뮤니티 오피스",
+    // 2026-10-27 개편: 스펙 중심 → 사람·커뮤니티 중심 (대표 지시)
+    tagline: "Freelance, not Friendless",
+    title: "혼자 일하지만,\n혼자는 아니에요",
+    subtitle: "운양역 1분 · 24시간 · 프리랜서와 1인 사업자가 함께 일하는 커뮤니티 오피스",
+    image: "/photos/web/moments-coffeechat-10.jpg", // 대표 확인 필요: 히어로 사진 선택
     buttons: [
-      { text: "1일 무료체험 신청", link: "#trial-application" }
+      { text: "자유석 1일 무료 체험 예약", link: "#trial-application" },
+      { text: "커뮤니티 둘러보기", link: "#community-moments" }
     ]
   },
+  // '요즘 오디워크룸' — 살아있는 커뮤니티 기록. 매달 여기에 추가 (콘텐츠 세션)
+  communityMoments: {
+    nextEvent: {
+      badge: "다음 모임",
+      name: "AI 커피챗",
+      date: "11월 6일 금요일",
+      desc: "한 달의 AI 소식을 같이 따라잡고, 각자 써본 경험을 나눠요. 정기 회원이라면 누구나 참여할 수 있어요."
+    },
+    moments: [
+      {
+        title: "AI 커피챗 4회차 — 한 달 AI 뉴스 브리핑",
+        date: "2026.10.02",
+        photo: "/photos/web/moments-ai-coffeechat-4.jpg",
+        note: "이번 달에 나온 AI 소식 중 '내 일에 바로 쓸 것'만 골라서 수다 떨었어요."
+      },
+      {
+        title: "AI 스터디 #1 — 클로드로 릴스 편집해 보기",
+        date: "2026.10.19",
+        photo: "",
+        note: "멤버가 직접 연 첫 스터디. 각자 노트북 들고 모여 릴스 한 편씩 만들었어요."
+      },
+      {
+        title: "정기 커피챗 — 열 명이 모인 날",
+        date: "2026.09",
+        photo: "/photos/web/moments-coffeechat-10.jpg",
+        note: "일 얘기로 시작해서 동네 맛집 얘기로 끝났지만, 그게 커피챗이죠."
+      }
+    ]
+  },
+  // 멤버 한 줄 후기 — 대표가 확보하는 대로 채우면 자동 노출 (비어 있으면 섹션 숨김)
+  testimonials: [] as { job: string; quote: string }[],
   intro: {
     title: "혼자 일하지만, 외롭지 않게.",
     description: "오디워크룸은 각자 조용히 일하다가도 자연스럽게 인사하고 커피 한 잔 나눌 수 있는 작업공간입니다. 억지스러운 네트워킹보다, 오래 일해도 편한 분위기를 중요하게 생각합니다."
@@ -60,18 +95,13 @@ export const ODI_CONTENT = {
     },
     {
       title: "재택근무자",
-      desc: "일과 삶의 분리가 절실한 분들께 쾌적한 오피스 환경과 리프레시를 제공합니다.",
+      desc: "일과 삶의 분리가 필요할 때, 출근하듯 나와서 일하고 퇴근하듯 돌아갈 수 있어요.",
       icon: "Home"
-    },
-    {
-      title: "대학생/취준생",
-      desc: "독서실의 답답함 대신 백색소음과 함께 적당한 긴장감 속에서 몰입하고 싶은 분.",
-      icon: "GraduationCap"
     }
   ],
   atmosphere: {
-    title: "독서실보다는 카페에 가까운 작업실",
-    highlight: "백색 소음과 적당한 몰입감이 공존하는 공간입니다.",
+    title: "카페의 편안함, 오피스의 몰입감",
+    highlight: "백색 소음과 적당한 몰입감이 공존하는 공간이에요.",
     notice: "※ 오디워크룸은 완전한 무소음 공간이 아닙니다. 가벼운 인사와 소음이 허용되는 자유로운 분위기를 지향합니다.",
     images: [
       "/IMG_0180.JPG",
@@ -152,9 +182,16 @@ export const ODI_CONTENT = {
   pricingProps: {
     disclaimer: "3개월 이상 계약 시 할인 혜택이 제공됩니다 · 모든 이용권 가격은 VAT 별도입니다."
   },
+  // 12시간권 — 하루 체험 상품 (VAT 포함가, 네이버 예약)
+  dayPass: {
+    name: "12시간권",
+    price: "13,900원",
+    note: "VAT 포함 · 네이버 예약",
+    desc: "하루만 집중해서 써보고 싶다면, 12시간권으로 가볍게 시작해 보세요."
+  },
   dedicatedSeatPromo: {
     eyebrow: "Dedicated Desk",
-    title: "전용석 잔여 2석 상담 가능",
+    title: "전용석, 나만의 고정 자리 (잔여석은 문의 주세요)",
     description: "매번 자리 찾지 않아도 되는 나만의 고정 작업석이 필요하다면 전용석을 확인해보세요. 짐을 두고 다닐 수 있고, 24시간 언제든 바로 작업을 시작할 수 있습니다.",
     points: ["고정 좌석", "개인 서랍", "넓은 데스크", "24시간 이용"],
     cta: "전용석 문의하기"
@@ -163,8 +200,8 @@ export const ODI_CONTENT = {
     {
       type: "자유석",
       benefit: "기분에 따라 원하는 자리에서",
-      price: "140,000~",
-      period: "/1개월",
+      price: "월 170,000원",
+      period: "(장기 할인 있음)",
       buttonText: "이용권 문의하기",
       image: "/photos/web/free-seat-001.webp",
       galleryImages: [
@@ -220,8 +257,8 @@ export const ODI_CONTENT = {
     {
       type: "전용석",
       benefit: "이제는 내 자리 하나쯤",
-      price: "270,000~",
-      period: "/1개월",
+      price: "월 320,000원",
+      period: "(장기 할인 있음)",
       buttonText: "이용권 문의하기",
       image: "/photos/web/dedicated-seat-004.webp",
       galleryImages: [
@@ -386,8 +423,8 @@ export const ODI_CONTENT = {
       },
       {
         name: "연말 네트워킹",
-        badge: "매년 12월",
-        desc: "한 해를 마무리하며 입주자와 비상주 회원이 함께 모이는 자리예요. 올해 송년 모임은 12월에 열려요.",
+        badge: "올해 12월",
+        desc: "한 해를 마무리하며 입주자와 비상주 회원이 함께 모여요. 올해 12월, 첫 송년 모임이 열립니다.",
         action: "none"
       },
       {
