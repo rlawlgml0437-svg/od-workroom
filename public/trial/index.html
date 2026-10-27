@@ -34,8 +34,9 @@ body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; color: var
 .screen { max-width: 440px; margin: 0 auto; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column;
           padding: 20px 20px calc(18px + env(safe-area-inset-bottom)); }
 .logo { height: 15px; width: auto; display: block; margin: 4px auto 0; }
-/* 10/26 수정(대표): 사진·문구도 빼고 두 버튼만 — 화면 가운데~아래, 엄지 닿는 위치 */
-.actions { margin-top: auto; margin-bottom: 14vh; margin-bottom: 14svh; }
+/* 10/26 수정(대표): 사진·문구도 빼고 두 버튼만.
+   10/27 수정(대표 "중간쯤으로, 아래쪽 별로"): 버튼 묶음을 화면 세로 가운데로 */
+.actions { margin-top: auto; margin-bottom: auto; padding-bottom: 19px; }
 .btn { display: block; width: 100%; text-align: center; text-decoration: none; border-radius: 14px;
        font-size: 17px; font-weight: 700; padding: 18px 0; }
 .btn.main { background: var(--accent); color: #fff; }
