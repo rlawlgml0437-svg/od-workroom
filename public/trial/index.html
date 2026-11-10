@@ -58,7 +58,6 @@ body { font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; color: var
   <img class="logo" src="/logo.svg" alt="오디워크룸">
   <div class="actions">
     <a class="btn main" href="#" data-book>자유석 무료 체험 예약</a>
-    <a class="btn home" href="https://www.odworkroom.com/" data-home>오디워크룸 보러가기</a>
     <div class="smsfall" id="smsfall">
       <p>네이버 로그인이 번거로우시면, 문자로도 예약하실 수 있어요.</p>
       <a href="sms:01049850437?body=%5B%EB%9E%9C%EB%94%A9%5D%20%EC%B2%B4%ED%97%98%20%EC%98%88%EC%95%BD%20%EB%AC%B8%EC%9D%98%EB%93%9C%EB%A6%BD%EB%8B%88%EB%8B%A4" data-smsfall>문자로 예약 문의하기</a>
@@ -84,7 +83,6 @@ document.querySelectorAll('[data-book]').forEach(function(el){
     setTimeout(openNaver, 250);
   });
 });
-document.querySelector('[data-home]').addEventListener('click', function(){ ot('home_click'); });
 
 /* 인스타 인앱브라우저는 네이버 로그인이 막히므로 앱으로 먼저 보낸다 */
 function openNaver(){
